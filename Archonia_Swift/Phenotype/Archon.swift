@@ -21,29 +21,19 @@ class Archon {
         
         inScene.addChild(sprite)
         
-        let button = SKShapeNode(circleOfRadius: 7.5 / 3)
-        button.fillColor = .white
-        sprite.addChild(button)
-        
         let physicsBody = SKPhysicsBody(circleOfRadius: 7.5)
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         physicsBody.collisionBitMask = 0
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         sprite.physicsBody = physicsBody
         
-        let sensorBody = SKPhysicsBody(circleOfRadius: 15)
-        sensorBody.mass = 0
-        sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
-        sensorBody.collisionBitMask = 0
-        sensorBody.categoryBitMask = Axioms.PhysicsBitmask.Sensor.rawValue
-        button.physicsBody = sensorBody
+        let sensorBody = setupButton(name: inName)
         
         let connectionPoint = sprite.convert(CGPoint.zero, to: inScene)
         let joint = SKPhysicsJointFixed.joint(withBodyA: physicsBody, bodyB: sensorBody, anchor: connectionPoint)
         inScene.physicsWorld.add(joint)
         
         sprite.name = inName;
-        button.name = inName;
         
         let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
         let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
@@ -52,6 +42,23 @@ class Archon {
         let y = CGFloat(distributionY.nextInt())
         
         sprite.physicsBody?.applyImpulse(CGVector(dx: x, dy: y))
+    }
+    
+    private func setupButton(name inName : String) -> SKPhysicsBody {
+        let button = SKShapeNode(circleOfRadius: 7.5 / 3)
+        button.fillColor = .white
+        sprite.addChild(button)
+        
+        let sensorBody = SKPhysicsBody(circleOfRadius: 15)
+        sensorBody.mass = 0
+        sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
+        sensorBody.collisionBitMask = 0
+        sensorBody.categoryBitMask = Axioms.PhysicsBitmask.Sensor.rawValue
+        button.physicsBody = sensorBody
+        
+        button.name = inName
+        
+        return sensorBody
     }
     
     func mannaSensed(_ mannaBody : SKPhysicsBody) {
