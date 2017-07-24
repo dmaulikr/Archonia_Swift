@@ -12,6 +12,7 @@ import SpriteKit
 
 class Archon {
     var sprite: SKShapeNode
+    var grid = [SKShapeNode]()
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         sprite = SKShapeNode(circleOfRadius: 7.5);
@@ -35,6 +36,8 @@ class Archon {
         
         sprite.name = inName;
         
+        setupGrid(scene: inScene);
+        
         let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
         let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
         
@@ -42,6 +45,20 @@ class Archon {
         let y = CGFloat(distributionY.nextInt())
         
         sprite.physicsBody?.applyImpulse(CGVector(dx: x, dy: y))
+    }
+    
+    private func setupGrid(scene inScene : GameScene) {
+        for _ in 0 ..< 8 {
+            let square = SKShapeNode(rectOf: CGSize(width: 15, height: 15))
+            
+            square.position = sprite.position;
+            square.fillColor = NSColor(calibratedWhite: 0, alpha: 0)
+            square.strokeColor = .white
+            
+            inScene.addChild(square)
+            
+            grid.append(square)
+        }
     }
     
     private func setupButton(name inName : String) -> SKPhysicsBody {
@@ -76,6 +93,7 @@ class Archon {
         let name = (sprite.name)!
         let button = sprite.childNode(withName: name)!
         button.physicsBody!.velocity = CGVector.zero
+        
         myBody.applyImpulse(b)
     }
 }
