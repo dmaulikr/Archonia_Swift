@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
-		D4AF0FF81F2644D400FD239E /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF71F2644D400FD239E /* Actions.sks */; };
 		D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF91F2644D400FD239E /* GameScene.swift */; };
 		D4AF0FFC1F2644D400FD239E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FFB1F2644D400FD239E /* ViewController.swift */; };
 		D4AF0FFE1F2644D400FD239E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FFD1F2644D400FD239E /* Assets.xcassets */; };
 		D4AF10011F2644D400FD239E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FFF1F2644D400FD239E /* Main.storyboard */; };
 		D4AF100C1F2644D400FD239E /* Archonia_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF100B1F2644D400FD239E /* Archonia_SwiftTests.swift */; };
+		D4AF10181F2646D900FD239E /* Archon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10171F2646D900FD239E /* Archon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +31,6 @@
 		D4AF0FF01F2644D400FD239E /* Archonia_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Archonia_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF0FF31F2644D400FD239E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4AF0FF51F2644D400FD239E /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		D4AF0FF71F2644D400FD239E /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		D4AF0FF91F2644D400FD239E /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D4AF0FFB1F2644D400FD239E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D4AF0FFD1F2644D400FD239E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -40,6 +39,7 @@
 		D4AF10071F2644D400FD239E /* Archonia_SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Archonia_SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF100B1F2644D400FD239E /* Archonia_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archonia_SwiftTests.swift; sourceTree = "<group>"; };
 		D4AF100D1F2644D400FD239E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4AF10171F2646D900FD239E /* Archon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Archon.swift; path = Phenotype/Archon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,9 +81,9 @@
 		D4AF0FF21F2644D400FD239E /* Archonia_Swift */ = {
 			isa = PBXGroup;
 			children = (
+				D4AF10161F2646BF00FD239E /* Phenotype */,
 				D4AF0FF31F2644D400FD239E /* AppDelegate.swift */,
 				D4AF0FF51F2644D400FD239E /* GameScene.sks */,
-				D4AF0FF71F2644D400FD239E /* Actions.sks */,
 				D4AF0FF91F2644D400FD239E /* GameScene.swift */,
 				D4AF0FFB1F2644D400FD239E /* ViewController.swift */,
 				D4AF0FFD1F2644D400FD239E /* Assets.xcassets */,
@@ -100,6 +100,14 @@
 				D4AF100D1F2644D400FD239E /* Info.plist */,
 			);
 			path = Archonia_SwiftTests;
+			sourceTree = "<group>";
+		};
+		D4AF10161F2646BF00FD239E /* Phenotype */ = {
+			isa = PBXGroup;
+			children = (
+				D4AF10171F2646D900FD239E /* Archon.swift */,
+			);
+			name = Phenotype;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,7 +197,6 @@
 			files = (
 				D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */,
 				D4AF0FFE1F2644D400FD239E /* Assets.xcassets in Resources */,
-				D4AF0FF81F2644D400FD239E /* Actions.sks in Resources */,
 				D4AF10011F2644D400FD239E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,6 +217,7 @@
 			files = (
 				D4AF0FFC1F2644D400FD239E /* ViewController.swift in Sources */,
 				D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */,
+				D4AF10181F2646D900FD239E /* Archon.swift in Sources */,
 				D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
