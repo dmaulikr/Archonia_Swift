@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D482396E1F27ABC100E3ED67 /* Forager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D482396D1F27ABC100E3ED67 /* Forager.swift */; };
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
 		D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF91F2644D400FD239E /* GameScene.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D482396D1F27ABC100E3ED67 /* Forager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Forager.swift; path = Phenotype/Forager.swift; sourceTree = "<group>"; };
 		D4AF0FF01F2644D400FD239E /* Archonia_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Archonia_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF0FF31F2644D400FD239E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4AF0FF51F2644D400FD239E /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				D4AF10171F2646D900FD239E /* Archon.swift */,
+				D482396D1F27ABC100E3ED67 /* Forager.swift */,
 			);
 			name = Phenotype;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */,
 				D4AF10181F2646D900FD239E /* Archon.swift in Sources */,
 				D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */,
+				D482396E1F27ABC100E3ED67 /* Forager.swift in Sources */,
 				D4AF101F1F265A8000FD239E /* MannaParticle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,6 +455,7 @@
 				D4AF10121F2644D400FD239E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D4AF10131F2644D400FD239E /* Build configuration list for PBXNativeTarget "Archonia_SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -459,6 +464,7 @@
 				D4AF10151F2644D400FD239E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
