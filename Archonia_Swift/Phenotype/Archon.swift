@@ -37,7 +37,7 @@ class Archon {
         
         sprite.name = inName;
         
-        setupGrid(scene: inScene);
+//        setupGrid(scene: inScene);
         
         let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
         let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
@@ -64,11 +64,12 @@ class Archon {
     
     private func setupButton(name inName : String) -> SKPhysicsBody {
         let button = SKSpriteNode(imageNamed: "archon")
-        button.scale(to: CGSize(width: 5, height: 5))
+        button.scale(to: CGSize(width: 50, height: 50))
         button.colorBlendFactor = 1
+        button.color = .white
         sprite.addChild(button)
         
-        let sensorBody = SKPhysicsBody(circleOfRadius: 15)
+        let sensorBody = SKPhysicsBody(circleOfRadius: 100)
         sensorBody.mass = 0
         sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         sensorBody.collisionBitMask = 0
