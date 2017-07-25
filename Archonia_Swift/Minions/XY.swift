@@ -6,7 +6,7 @@
 //  Copyright © 2017 Rob Bishop. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
 
 struct XY {
     var x = 0.0, y = 0.0
