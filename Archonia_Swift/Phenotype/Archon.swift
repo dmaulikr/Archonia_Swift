@@ -62,8 +62,8 @@ class Archon {
     }
     
     private func setupButton(name inName : String) -> SKPhysicsBody {
-        let button = SKShapeNode(circleOfRadius: 7.5 / 3)
-        button.fillColor = .white
+        let button = SKSpriteNode(imageNamed: "archon")
+        button.scale(to: CGSize(width: 5, height: 5))
         sprite.addChild(button)
         
         let sensorBody = SKPhysicsBody(circleOfRadius: 15)
