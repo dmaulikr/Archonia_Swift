@@ -27,9 +27,10 @@ class Archon {
         
         let physicsBody = SKPhysicsBody(circleOfRadius: 7.5)
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
-        physicsBody.collisionBitMask = 0
+        physicsBody.collisionBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         physicsBody.linearDamping = 100
+        physicsBody.restitution = 0
         sprite.physicsBody = physicsBody
         
         let sensorBody = setupButton(name: inName)
@@ -44,14 +45,6 @@ class Archon {
         
         forager = Forager(self)
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
-//        
-//        let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
-//        let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
-//        
-//        let x = CGFloat(distributionX.nextInt())
-//        let y = CGFloat(distributionY.nextInt())
-//        
-//        sprite.physicsBody?.applyImpulse(CGVector(dx: x, dy: y))
     }
     
     @objc private func tick() {
