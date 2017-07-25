@@ -109,10 +109,8 @@ struct Forager {
         }
     }
     
-    mutating func tick() -> Int {
+    mutating func tick() {
         let constraint = computeMovementConstraint()
         computeMovementTarget(constraint)
-        
-        return trail.getIndexOfNewestElement()
     }
 }

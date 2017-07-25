@@ -15,6 +15,7 @@ class Archon {
     var grid = [SKSpriteNode]()
     var forager : Forager?
     var timer : Timer?
+    var showForagingDebug = false
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         sprite = SKSpriteNode(imageNamed: "archon")
@@ -48,10 +49,21 @@ class Archon {
     }
     
     @objc private func tick() {
-        let gridArrayIndex = forager!.tick()
-        let square = grid[gridArrayIndex]
-        square.position = forager!.targetPosition.toCGPoint()
-//        square.alpha = 1
+        forager!.tick()
+
+        if showForagingDebug {
+            let gridArrayIndex = forager!.trail.getIndexOfNewestElement()
+            let square = grid[gridArrayIndex]
+            square.position = forager!.targetPosition.toCGPoint()
+            square.alpha = 1
+            
+            for i in 0 ..< 8 {
+                let j = (gridArrayIndex + i + 1) % 8
+                
+                grid[j].alpha -= (1.0 / 8.0)
+                if grid[j].alpha < 0 { grid[j].alpha = 0 }
+            }
+        }
         
         sprite.physicsBody?.velocity = CGVector.zero
 
@@ -64,17 +76,18 @@ class Archon {
     }
     
     private func setupGrid(scene inScene : GameScene) {
-        for _ in 0 ..< 8 {
-            let square = SKSpriteNode(imageNamed: "grid")
-            square.scale(to: CGSize(width: 15, height: 15))
-            square.colorBlendFactor = 1
-            square.color = .white
-            square.alpha = 0
-            square.position = sprite.position;
-            
-            inScene.addChild(square)
-            
-            grid.append(square)
+        if showForagingDebug {
+            for _ in 0 ..< 8 {
+                let square = SKSpriteNode(imageNamed: "grid")
+                square.scale(to: CGSize(width: 30, height: 30))
+                square.colorBlendFactor = 1
+                square.color = .white
+                square.position = sprite.position;
+                
+                inScene.addChild(square)
+                
+                grid.append(square)
+            }
         }
     }
     
