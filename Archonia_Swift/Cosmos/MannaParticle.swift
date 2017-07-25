@@ -10,12 +10,12 @@ import Foundation
 import SpriteKit
 
 class MannaParticle {
-    var sprite: SKShapeNode
+    var sprite: SKSpriteNode
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
-        sprite = SKShapeNode(circleOfRadius: 0.5);
+        sprite = SKSpriteNode(imageNamed: "archon")
+        sprite.scale(to: CGSize(width: 1.75, height: 1.75))
         sprite.position = CGPoint(x: inX, y: inY);
-        sprite.fillColor = .white
         
         sprite.name = inName
         

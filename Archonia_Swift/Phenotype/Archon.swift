@@ -83,7 +83,7 @@ class Archon {
     
     func mannaSensed(_ mannaBody : SKPhysicsBody) {
         let myBody = sprite.physicsBody!
-        print("Manna sensed; v = ", myBody.velocity.dx, ", ", myBody.velocity.dy);
+
         let x = mannaBody.node!.position.x - myBody.node!.position.x
         let y = mannaBody.node!.position.y - myBody.node!.position.y
         
