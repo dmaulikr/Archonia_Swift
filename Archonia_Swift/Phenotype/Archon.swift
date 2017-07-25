@@ -12,7 +12,7 @@ import SpriteKit
 
 class Archon {
     var sprite: SKSpriteNode
-    var grid = [SKShapeNode]()
+    var grid = [SKSpriteNode]()
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         sprite = SKSpriteNode(imageNamed: "archon")
@@ -37,7 +37,7 @@ class Archon {
         
         sprite.name = inName;
         
-//        setupGrid(scene: inScene);
+        setupGrid(scene: inScene);
         
         let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
         let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
@@ -50,11 +50,12 @@ class Archon {
     
     private func setupGrid(scene inScene : GameScene) {
         for _ in 0 ..< 8 {
-            let square = SKShapeNode(rectOf: CGSize(width: 15, height: 15))
-            
+            let square = SKSpriteNode(imageNamed: "grid")
+            square.scale(to: CGSize(width: 15, height: 15))
+            square.colorBlendFactor = 1
+            square.color = .white
+            square.alpha = 0
             square.position = sprite.position;
-            square.fillColor = NSColor(calibratedWhite: 0, alpha: 0)
-            square.strokeColor = .white
             
             inScene.addChild(square)
             
