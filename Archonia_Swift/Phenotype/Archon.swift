@@ -11,8 +11,10 @@ import GameplayKit
 import SpriteKit
 
 class Archon {
-    var sprite: SKSpriteNode
+    var sprite : SKSpriteNode
     var grid = [SKSpriteNode]()
+    var forager : Forager?
+    var timer : Timer?
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         sprite = SKSpriteNode(imageNamed: "archon")
@@ -27,6 +29,7 @@ class Archon {
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         physicsBody.collisionBitMask = 0
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
+        physicsBody.linearDamping = 100
         sprite.physicsBody = physicsBody
         
         let sensorBody = setupButton(name: inName)
@@ -39,13 +42,29 @@ class Archon {
         
         setupGrid(scene: inScene);
         
-        let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
-        let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
+        forager = Forager(self)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+//        
+//        let distributionX = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
+//        let distributionY = GKRandomDistribution(lowestValue: Int(-1e2), highestValue: Int(1e2));
+//        
+//        let x = CGFloat(distributionX.nextInt())
+//        let y = CGFloat(distributionY.nextInt())
+//        
+//        sprite.physicsBody?.applyImpulse(CGVector(dx: x, dy: y))
+    }
+    
+    @objc private func tick() {
+        forager!.tick()
         
-        let x = CGFloat(distributionX.nextInt())
-        let y = CGFloat(distributionY.nextInt())
+        sprite.physicsBody?.velocity = CGVector.zero
+
+        let name = (sprite.name)!
+        let button = sprite.childNode(withName: name)!
+        button.physicsBody!.velocity = CGVector.zero
         
-        sprite.physicsBody?.applyImpulse(CGVector(dx: x, dy: y))
+        let impulse = XY(forager!.targetPosition - XY(sprite.position)).normalized() * 100
+        sprite.physicsBody?.applyImpulse(impulse.toCGVector())
     }
     
     private func setupGrid(scene inScene : GameScene) {
@@ -71,7 +90,6 @@ class Archon {
         sprite.addChild(button)
         
         let sensorBody = SKPhysicsBody(circleOfRadius: 100)
-        sensorBody.mass = 0
         sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         sensorBody.collisionBitMask = 0
         sensorBody.categoryBitMask = Axioms.PhysicsBitmask.Sensor.rawValue
@@ -83,6 +101,7 @@ class Archon {
     }
     
     func mannaSensed(_ mannaBody : SKPhysicsBody) {
+        #if false
         let myBody = sprite.physicsBody!
 
         let x = mannaBody.node!.position.x - myBody.node!.position.x
@@ -99,5 +118,6 @@ class Archon {
         button.physicsBody!.velocity = CGVector.zero
         
         myBody.applyImpulse(b)
+        #endif
     }
 }

@@ -11,6 +11,7 @@ import Foundation
 struct XY {
     var x = 0.0, y = 0.0
     
+    init() { x = 0; y = 0 }
     init(_ inX : Double, _ inY : Double) { x = inX; y = inY }
     init(_ point : XY) { x = point.x; y = point.y }
     init(_ point : CGPoint) { x = Double(point.x); y = Double(point.y) }
@@ -27,6 +28,9 @@ struct XY {
     static func *(lhs : XY, rhs : Double) -> XY { return XY(lhs.x * rhs, lhs.y * rhs) }
     static func /(lhs : XY, rhs : Double) -> XY { return XY(lhs.x / rhs, lhs.y / rhs) }
     func floored() -> XY { return XY(Darwin.floor(x), Darwin.floor(y)) }
+    func normalized() -> XY { let m = getMagnitude(); return XY(x / m, y / m) }
+    
+    static func ==(lhs : XY, rhs : XY) -> Bool { return lhs.x == rhs.x && lhs.y == rhs.y }
     
     func getSign() -> Int {
         let sx = (x == 0) ? 0 : Int(abs(x) / x)
@@ -44,4 +48,7 @@ struct XY {
     func getDistanceTo(_ otherPoint : XY) -> Double { let a = XY(self - otherPoint); return a.getMagnitude() }
     
     static func fromPolar(r : Double, theta : Double) -> XY { return XY(cos(theta) * r, sin(theta) * r) }
+    
+    func toCGVector() -> CGVector { return CGVector(dx: x, dy: y) }
+    func toCGPoint() -> CGPoint { return CGPoint(x: x, y: y) }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D42EFB6A1F27B80E00D42D42 /* Forager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB691F27B80E00D42D42 /* Forager.swift */; };
+		D42EFB6C1F27CA7600D42D42 /* CBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */; };
 		D48239701F27AE4600E3ED67 /* XY.swift in Sources */ = {isa = PBXBuildFile; fileRef = D482396F1F27AE4600E3ED67 /* XY.swift */; };
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		D42EFB691F27B80E00D42D42 /* Forager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Forager.swift; path = Phenotype/Forager.swift; sourceTree = "<group>"; };
+		D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBuffer.swift; path = Minions/CBuffer.swift; sourceTree = "<group>"; };
 		D482396F1F27AE4600E3ED67 /* XY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XY.swift; path = Minions/XY.swift; sourceTree = "<group>"; };
 		D4AF0FF01F2644D400FD239E /* Archonia_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Archonia_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF0FF31F2644D400FD239E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				D482396F1F27AE4600E3ED67 /* XY.swift */,
+				D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */,
 			);
 			name = Minions;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				D42EFB6A1F27B80E00D42D42 /* Forager.swift in Sources */,
 				D4AF10211F265DDC00FD239E /* MannaGenerator.swift in Sources */,
 				D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */,
+				D42EFB6C1F27CA7600D42D42 /* CBuffer.swift in Sources */,
 				D48239701F27AE4600E3ED67 /* XY.swift in Sources */,
 				D4AF10181F2646D900FD239E /* Archon.swift in Sources */,
 				D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */,
