@@ -11,14 +11,15 @@ import GameplayKit
 import SpriteKit
 
 class Archon {
-    var sprite: SKShapeNode
+    var sprite: SKSpriteNode
     var grid = [SKShapeNode]()
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
-        sprite = SKShapeNode(circleOfRadius: 7.5);
+        sprite = SKSpriteNode(imageNamed: "archon")
+        sprite.scale(to: CGSize(width: 15, height: 15))
         sprite.position = CGPoint(x: inX, y: inY);
-        sprite.fillColor = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
-        sprite.strokeColor = sprite.fillColor
+        sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
+        sprite.colorBlendFactor = 1
         
         inScene.addChild(sprite)
         
@@ -64,6 +65,7 @@ class Archon {
     private func setupButton(name inName : String) -> SKPhysicsBody {
         let button = SKSpriteNode(imageNamed: "archon")
         button.scale(to: CGSize(width: 5, height: 5))
+        button.colorBlendFactor = 1
         sprite.addChild(button)
         
         let sensorBody = SKPhysicsBody(circleOfRadius: 15)
