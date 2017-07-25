@@ -21,13 +21,13 @@ struct Forager {
     var targetPosition : XY
     var trail : CBuffer<XY>
     
-    enum MovementConstraint { case random, upOnly, downOnly, noUp, noDown, noLeft, noRight }
+    enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
 
     init(_ archon : Archon) {
         relativePositions = [
-            XY(0, -squareSize), XY(squareSize, -squareSize), XY(squareSize, 0),
-            XY(squareSize, squareSize), XY(0, squareSize), XY(-squareSize, squareSize),
-            XY(-squareSize, 0), XY(-squareSize, -squareSize)
+            XY(0, squareSize), XY(squareSize, squareSize), XY(squareSize, 0),
+            XY(squareSize, -squareSize), XY(0, -squareSize), XY(-squareSize, -squareSize),
+            XY(-squareSize, 0), XY(-squareSize, squareSize)
         ]
         
         sprite = archon.sprite
@@ -41,11 +41,11 @@ struct Forager {
     func computeMovementConstraint() -> MovementConstraint {
         var constraint = MovementConstraint.random
         
-        if sprite.position.x < 0 { constraint = .noLeft }
-        else if sprite.position.x > scene.size.width { constraint = .noRight }
+        if sprite.position.x < 0 { constraint = .rightOnly }
+        else if sprite.position.x > scene.size.width { constraint = .leftOnly }
         
-        if sprite.position.y < 0 { constraint = .noDown }
-        else if sprite.position.y > scene.size.height { constraint = .noUp }
+        if sprite.position.y < 0 { constraint = .upOnly }
+        else if sprite.position.y > scene.size.height { constraint = .downOnly }
         
         return constraint
     }
@@ -97,18 +97,22 @@ struct Forager {
     
     func populateMovementChoices(_ constraint : MovementConstraint) -> [Int] {
         switch(constraint) {
-        case .random:   return [0, 1, 2, 3, 4, 5, 6, 7]
-        case .upOnly:   return [0, 1, 7]
-        case .downOnly: return [3, 4, 5]
-        case .noUp:     return [2, 3, 4, 5, 6]
-        case .noRight:  return [4, 5, 6, 7, 0]
-        case .noDown:   return [6, 7, 0, 1, 2]
-        case .noLeft:   return [0, 1, 2, 3, 4]
+        case .random:    return [0, 1, 2, 3, 4, 5, 6, 7]
+        case .upOnly:
+            return [0, 1, 7]
+        case .rightOnly:
+            return [1, 2, 3]
+        case .downOnly:
+            return [3, 4, 5]
+        case .leftOnly:
+            return [5, 6, 7]
         }
     }
     
-    mutating func tick() {
+    mutating func tick() -> Int {
         let constraint = computeMovementConstraint()
         computeMovementTarget(constraint)
+        
+        return trail.getIndexOfNewestElement()
     }
 }

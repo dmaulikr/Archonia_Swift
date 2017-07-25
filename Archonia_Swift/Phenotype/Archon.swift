@@ -48,7 +48,10 @@ class Archon {
     }
     
     @objc private func tick() {
-        forager!.tick()
+        let gridArrayIndex = forager!.tick()
+        let square = grid[gridArrayIndex]
+        square.position = forager!.targetPosition.toCGPoint()
+//        square.alpha = 1
         
         sprite.physicsBody?.velocity = CGVector.zero
 
