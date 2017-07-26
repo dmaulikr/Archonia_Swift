@@ -11,24 +11,27 @@ import GameplayKit
 
 class MannaGenerator {
     var manna = [String : MannaParticle]()
+    var eatenManna = Set<String>()
     
     init(scene inScene: GameScene) {
-        let size = inScene.size
-        let distributionX = GKRandomDistribution(lowestValue: Int(0), highestValue: Int(size.width));
-        let distributionY = GKRandomDistribution(lowestValue: Int(0), highestValue: Int(size.height));
-        
         for _ in 0 ..< 500 {
-            let x = Double(distributionX.nextInt())
-            let y = Double(distributionY.nextInt())
             let name = String(Axioms.nextUniqueObjectID())
 
-            manna[name] = MannaParticle(scene: inScene, name: name, x: x, y: y)
+            manna[name] = MannaParticle(scene: inScene, name: name)
         }
     }
     
     func detectCollision(name inName : String) {
-        guard let m = manna[inName] else { fatalError("Manna not found?") }
-        m.collisionDetected()
-        manna.removeValue(forKey: inName)
+        guard let _ = manna[inName] else { fatalError("Manna not found?") }
+        eatenManna.insert(inName)
+    }
+    
+    func tick() {
+        for name in eatenManna {
+            guard let m = manna[name] else { fatalError("Manna not found?") }
+            m.collisionDetected()
+        }
+        
+        eatenManna.removeAll()
     }
 }

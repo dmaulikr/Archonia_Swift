@@ -11,7 +11,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var archons = [String : Archon]()
-    var mannaGenerator : MannaGenerator?
+    var mannaGenerator : MannaGenerator!
     
     override func didMove(to view: SKView) {
         mannaGenerator = MannaGenerator(scene: self)
@@ -19,7 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let distributionX = GKRandomDistribution(lowestValue: 0, highestValue: Int(size.width))
         let distributionY = GKRandomDistribution(lowestValue: 0, highestValue: Int(size.height))
         
-        for _ in 0 ..< 1 {
+        for _ in 0 ..< 25 {
             let name = String(Axioms.nextUniqueObjectID())
             archons[name] = Archon(scene: self, name: name, x: Double(distributionX.nextInt()), y: Double(distributionY.nextInt()))
         }
@@ -28,6 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        mannaGenerator.tick()
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -39,7 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     archon.mannaSensed(otherBody);
                 }
             } else if otherBody.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
-                self.mannaGenerator?.detectCollision(name: name);
+                self.mannaGenerator.detectCollision(name: name);
             }
         }
         

@@ -30,7 +30,7 @@ class Archon {
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         physicsBody.collisionBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
-        physicsBody.linearDamping = 100
+        physicsBody.linearDamping = 200
         physicsBody.restitution = 0
         sprite.physicsBody = physicsBody
         
