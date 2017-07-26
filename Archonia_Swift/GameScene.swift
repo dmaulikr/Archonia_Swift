@@ -29,6 +29,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         mannaGenerator.tick()
+        
+        for (_, archon) in archons { archon.tick() }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {

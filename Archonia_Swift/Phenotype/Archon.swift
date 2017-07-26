@@ -14,7 +14,11 @@ class Archon {
     var sprite : SKSpriteNode
     var grid = [SKSpriteNode]()
     var forager : Forager?
-    var showForagingDebug = false
+    let showForagingDebug = false
+    var isForaging = false
+    var isPursuingManna = false
+    var mannaToPursue: SKPhysicsBody?
+    let foragingDelay: SKAction
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         sprite = SKSpriteNode(imageNamed: "archon")
@@ -32,6 +36,12 @@ class Archon {
         physicsBody.linearDamping = 200
         physicsBody.restitution = 0
         sprite.physicsBody = physicsBody
+
+        let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
+        let r = Float(q.nextInt())
+        let s = TimeInterval(r / 1000.0)
+        
+        foragingDelay = SKAction.wait(forDuration: s)
         
         let sensorBody = setupButton(name: inName)
         
@@ -43,22 +53,27 @@ class Archon {
         
         setupGrid(scene: inScene);
         
-        forager = Forager(self)
-        
-        let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
-        let r = Float(q.nextInt())
-        let s = TimeInterval(r / 1000.0)
-        
-        let w = SKAction.wait(forDuration: s)
-        let c = SKAction.run { self.tick() }
-        let g = SKAction.sequence([w, c])
-        let f = SKAction.repeatForever(g)
-        sprite.run(f)
+        setupForager()
     }
     
-    @objc private func tick() {
-        forager!.tick()
+    private func setupForager() {
+        if showForagingDebug { for i in 0 ..< 8 { grid[i].alpha = 0 } }
 
+        forager = Forager(self)
+        
+        sprite.removeAllActions()
+        
+        let c = SKAction.run { self.forage() }
+        let g = SKAction.sequence([foragingDelay, c])
+        let f = SKAction.repeatForever(g)
+        sprite.run(f)
+        
+        isForaging = true
+    }
+    
+    private func forage() {
+        forager!.tick()
+        
         if showForagingDebug {
             let gridArrayIndex = forager!.trail.getIndexOfNewestElement()
             let square = grid[gridArrayIndex]
@@ -74,7 +89,7 @@ class Archon {
         }
         
         sprite.physicsBody?.velocity = CGVector.zero
-
+        
         let name = (sprite.name)!
         let button = sprite.childNode(withName: name)!
         button.physicsBody!.velocity = CGVector.zero
@@ -117,8 +132,19 @@ class Archon {
         return sensorBody
     }
     
+    func tick() {
+        if mannaToPursue !== nil && !isPursuingManna { pursueManna() }
+    }
+    
     func mannaSensed(_ mannaBody : SKPhysicsBody) {
-        #if false
+        if mannaToPursue == nil { isPursuingManna = false }
+        
+        mannaToPursue = mannaBody
+    }
+    
+    private func pursueManna() {
+        guard let mannaBody = mannaToPursue else { fatalError("wtf?") }
+        
         let myBody = sprite.physicsBody!
 
         let x = mannaBody.node!.position.x - myBody.node!.position.x
@@ -126,7 +152,7 @@ class Archon {
         
         let v = CGVector(dx: x, dy: y)
         let a = sqrt(pow(v.dx, 2) + pow(v.dy, 2))
-        let b = CGVector(dx: v.dx / a * 50, dy: v.dy / a * 50)
+        let b = CGVector(dx: v.dx / a * 100, dy: v.dy / a * 100)
         
         myBody.velocity = CGVector.zero
         
@@ -135,6 +161,13 @@ class Archon {
         button.physicsBody!.velocity = CGVector.zero
         
         myBody.applyImpulse(b)
-        #endif
+        
+        isPursuingManna = true
+        mannaToPursue = nil
+        
+        sprite.removeAllActions()
+        
+        let c = SKAction.run { self.setupForager() }
+        sprite.run(c)
     }
 }
