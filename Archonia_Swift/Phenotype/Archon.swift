@@ -14,7 +14,6 @@ class Archon {
     var sprite : SKSpriteNode
     var grid = [SKSpriteNode]()
     var forager : Forager?
-    var timer : Timer?
     var showForagingDebug = false
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
@@ -45,11 +44,16 @@ class Archon {
         setupGrid(scene: inScene);
         
         forager = Forager(self)
-
+        
         let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
-        let s = Float(q.nextInt())
-        let r = TimeInterval(s / 1000.0)
-        timer = Timer.scheduledTimer(timeInterval: r, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+        let r = Float(q.nextInt())
+        let s = TimeInterval(r / 1000.0)
+        
+        let w = SKAction.wait(forDuration: s)
+        let c = SKAction.run { self.tick() }
+        let g = SKAction.sequence([w, c])
+        let f = SKAction.repeatForever(g)
+        sprite.run(f)
     }
     
     @objc private func tick() {
