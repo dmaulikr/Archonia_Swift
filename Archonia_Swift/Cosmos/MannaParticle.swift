@@ -13,14 +13,13 @@ import SpriteKit
 class MannaParticle {
     var sprite: SKSpriteNode
     let limitPoint: CGSize
-    var timer: Timer? = nil
     var isCoherent = false
     
     init(scene inScene : GameScene, name inName : String) {
         sprite = SKSpriteNode(imageNamed: "archon")
         sprite.scale(to: CGSize(width: 1.75, height: 1.75))
         sprite.colorBlendFactor = 1
-        
+        sprite.color = .white
         sprite.name = inName
         
         let physicsBody = SKPhysicsBody(circleOfRadius: 0.5)
@@ -35,37 +34,44 @@ class MannaParticle {
         cohere()
     }
     
-    @objc func cohere() {
+    func cohere() {
+        isCoherent = true
+
         let p = GKRandomDistribution(lowestValue: 0, highestValue: Int(limitPoint.width))
         sprite.position = CGPoint(x: p.nextInt(), y: p.nextInt())
 
         let q = GKRandomDistribution(lowestValue: 10000, highestValue: 20000)
-        let s = Float(q.nextInt())
-        let r = TimeInterval(s / 1000.0)
-        timer = Timer.scheduledTimer(timeInterval: r, target: self, selector: #selector(expire), userInfo: nil, repeats: false)
+        let r = Float(q.nextInt())
+        let s = TimeInterval(r / 1000.0)
         
-        sprite.color = .white
+        let w = SKAction.wait(forDuration: s)
+        let d = SKAction.run({self.decohere()})
+        let g = SKAction.sequence([w, d])
         
-        isCoherent = true
+        sprite.removeAllActions()
+        sprite.run(g)
     }
     
     func decohere() {
         guard isCoherent else { return }
-        
-        if let t = timer { t.invalidate() }
 
+        isCoherent = false
+        
         sprite.position = CGPoint(x: -100, y: -100)
-        sprite.color = .red
         
         let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
-        let s = Float(q.nextInt())
-        let r = TimeInterval(s / 1000.0)
-        timer = Timer.scheduledTimer(timeInterval: r, target: self, selector: #selector(cohere), userInfo: nil, repeats: false)
+        let r = Float(q.nextInt())
+        let s = TimeInterval(r / 1000.0)
         
-        isCoherent = false
+        let w = SKAction.wait(forDuration: s)
+        let d = SKAction.run({self.cohere()})
+        let g = SKAction.sequence([w, d])
+        
+        sprite.removeAllActions()
+        sprite.run(g)
     }
     
-    @objc func expire() {
+    func expire() {
         decohere()
     }
     
