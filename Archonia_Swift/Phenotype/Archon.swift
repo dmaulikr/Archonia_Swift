@@ -45,7 +45,11 @@ class Archon {
         setupGrid(scene: inScene);
         
         forager = Forager(self)
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+
+        let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
+        let s = Float(q.nextInt())
+        let r = TimeInterval(s / 1000.0)
+        timer = Timer.scheduledTimer(timeInterval: r, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
     }
     
     @objc private func tick() {
