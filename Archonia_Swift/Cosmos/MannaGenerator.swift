@@ -34,4 +34,9 @@ class MannaGenerator {
         
         eatenManna.removeAll()
     }
+    
+    func getMannaParticle(_ name: String) -> MannaParticle {
+        guard let p = manna[name] else { fatalError("wtf?") }
+        return p
+    }
 }

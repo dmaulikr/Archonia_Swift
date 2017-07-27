@@ -17,10 +17,15 @@ class Archon {
     let showForagingDebug = false
     var isForaging = false
     var isPursuingManna = false
+    var isEatingManna = false
     var mannaToPursue: SKPhysicsBody?
+    var mannaToEat = Set<String>()
     let foragingDelay: SKAction
+    let mannaGenerator: MannaGenerator
     
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
+        mannaGenerator = inScene.mannaGenerator!
+        
         sprite = SKSpriteNode(imageNamed: "archon")
         sprite.scale(to: CGSize(width: 15, height: 15))
         sprite.position = CGPoint(x: inX, y: inY);
@@ -134,12 +139,32 @@ class Archon {
     
     func tick() {
         if mannaToPursue !== nil && !isPursuingManna { pursueManna() }
+        if !mannaToEat.isEmpty { eatManna() }
     }
     
     func mannaSensed(_ mannaBody : SKPhysicsBody) {
         if mannaToPursue == nil { isPursuingManna = false }
         
         mannaToPursue = mannaBody
+    }
+    
+    func mannaTouched(_ mannaName: String) {
+        mannaToEat.insert(mannaName)
+    }
+    
+    private func eatManna() {
+        guard !mannaToEat.isEmpty else { return }
+        
+        let myBody = sprite.physicsBody!
+        
+        for mannaName in mannaToEat {
+            let mannaParticle = mannaGenerator.getMannaParticle(mannaName)
+            myBody.mass += mannaParticle.sprite.physicsBody!.mass / 10
+        }
+
+        mannaToEat.removeAll()
+        
+        print(sprite.name!, myBody.mass)
     }
     
     private func pursueManna() {
