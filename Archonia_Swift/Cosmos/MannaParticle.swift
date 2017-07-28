@@ -16,8 +16,7 @@ class MannaParticle {
     var isCoherent = false
     
     init(scene inScene : GameScene, name inName : String) {
-        sprite = SKSpriteNode(imageNamed: "archon")
-        sprite.scale(to: CGSize(width: 1.75, height: 1.75))
+        sprite = SKSpriteNode(imageNamed: "manna2")
         sprite.colorBlendFactor = 1
         sprite.color = .white
         sprite.name = inName

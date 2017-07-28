@@ -26,19 +26,18 @@ class Archon {
     init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
         mannaGenerator = inScene.mannaGenerator!
         
-        sprite = SKSpriteNode(imageNamed: "archon")
-        sprite.scale(to: CGSize(width: 15, height: 15))
+        sprite = SKSpriteNode(imageNamed: "archon15")
         sprite.position = CGPoint(x: inX, y: inY);
         sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
         sprite.colorBlendFactor = 1
         
         inScene.addChild(sprite)
         
-        let physicsBody = SKPhysicsBody(circleOfRadius: 7.5)
+        let physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         physicsBody.collisionBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
-        physicsBody.linearDamping = 200
+        physicsBody.linearDamping = 1
         physicsBody.restitution = 0
         sprite.physicsBody = physicsBody
 
@@ -99,7 +98,7 @@ class Archon {
         let button = sprite.childNode(withName: name)!
         button.physicsBody!.velocity = CGVector.zero
         
-        let impulse = XY(forager!.targetPosition - XY(sprite.position)).normalized() * 100
+        let impulse = XY(forager!.targetPosition - XY(sprite.position)).normalized()
         sprite.physicsBody?.applyImpulse(impulse.toCGVector())
     }
     
@@ -120,18 +119,19 @@ class Archon {
     }
     
     private func setupButton(name inName : String) -> SKPhysicsBody {
-        let button = SKSpriteNode(imageNamed: "archon")
-        button.scale(to: CGSize(width: 50, height: 50))
+        let button = SKSpriteNode(imageNamed: "button6")
+        button.zPosition = 1
         button.colorBlendFactor = 1
         button.color = .white
         sprite.addChild(button)
         
-        let sensorBody = SKPhysicsBody(circleOfRadius: 100)
+        let sensorBody = SKPhysicsBody(circleOfRadius: sprite.size.width)
         sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         sensorBody.collisionBitMask = 0
         sensorBody.categoryBitMask = Axioms.PhysicsBitmask.Sensor.rawValue
-        button.physicsBody = sensorBody
+        sensorBody.linearDamping = 0
         
+        button.physicsBody = sensorBody
         button.name = inName
         
         return sensorBody
@@ -176,8 +176,8 @@ class Archon {
         let y = mannaBody.node!.position.y - myBody.node!.position.y
         
         let v = CGVector(dx: x, dy: y)
-        let a = sqrt(pow(v.dx, 2) + pow(v.dy, 2))
-        let b = CGVector(dx: v.dx / a * 100, dy: v.dy / a * 100)
+        let a = Double(sqrt(pow(v.dx, 2) + pow(v.dy, 2)))
+        let b = XY(XY(v) / a).toCGVector()
         
         myBody.velocity = CGVector.zero
         
