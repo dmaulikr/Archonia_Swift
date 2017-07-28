@@ -36,8 +36,7 @@ class MannaParticle {
     func cohere() {
         isCoherent = true
 
-        let p = GKRandomDistribution(lowestValue: 0, highestValue: Int(limitPoint.width))
-        sprite.position = CGPoint(x: p.nextInt(), y: p.nextInt())
+        sprite.position = XY.randomPoint(range: limitPoint).toCGPoint()
 
         let q = GKRandomDistribution(lowestValue: 10000, highestValue: 20000)
         let r = Float(q.nextInt())

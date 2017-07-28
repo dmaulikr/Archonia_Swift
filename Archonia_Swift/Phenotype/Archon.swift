@@ -23,11 +23,11 @@ class Archon {
     let foragingDelay: SKAction
     let mannaGenerator: MannaGenerator
     
-    init(scene inScene : GameScene, name inName : String, x inX : Double, y inY : Double) {
+    init(scene inScene : GameScene, name inName : String) {
         mannaGenerator = inScene.mannaGenerator!
         
         sprite = SKSpriteNode(imageNamed: "archon15")
-        sprite.position = CGPoint(x: inX, y: inY);
+        sprite.position = XY.randomPoint(range: inScene.size).toCGPoint()
         sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
         sprite.colorBlendFactor = 1
         

@@ -13,6 +13,8 @@ struct XY {
     
     init() { x = 0; y = 0 }
     init(_ inX : Double, _ inY : Double) { x = inX; y = inY }
+    init(_ inX : Float, _ inY : Float) { x = Double(inX); y = Double(inY) }
+    init(_ inX : Int, _ inY : Int) { x = Double(inX); y = Double(inY) }
     init(_ point : XY) { x = point.x; y = point.y }
     init(_ point : CGPoint) { x = Double(point.x); y = Double(point.y) }
     init(_ size : CGSize) { x = Double(size.width); y = Double(size.height) }
@@ -53,4 +55,8 @@ struct XY {
     func toCGPoint() -> CGPoint { return CGPoint(x: x, y: y) }
     func toCGSize() -> CGSize { return CGSize(width: x, height: y) }
     func toCGVector() -> CGVector { return CGVector(dx: x, dy: y) }
+    
+    static func randomPoint(range: CGSize) -> XY {
+        return XY(Axioms.randomFloat(0, range.width), Axioms.randomFloat(0, range.height))
+    }
 }

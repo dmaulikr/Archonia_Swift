@@ -16,12 +16,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         mannaGenerator = MannaGenerator(scene: self)
         
-        let distributionX = GKRandomDistribution(lowestValue: 0, highestValue: Int(size.width))
-        let distributionY = GKRandomDistribution(lowestValue: 0, highestValue: Int(size.height))
-        
         for _ in 0 ..< 25 {
             let name = String(Axioms.nextUniqueObjectID())
-            archons[name] = Archon(scene: self, name: name, x: Double(distributionX.nextInt()), y: Double(distributionY.nextInt()))
+            archons[name] = Archon(scene: self, name: name)
         }
         
         physicsWorld.contactDelegate = self
