@@ -15,7 +15,8 @@ struct XY {
     init(_ inX : Double, _ inY : Double) { x = inX; y = inY }
     init(_ point : XY) { x = point.x; y = point.y }
     init(_ point : CGPoint) { x = Double(point.x); y = Double(point.y) }
-    init(_ point : CGVector) { x = Double(point.dx); y = Double(point.dy) }
+    init(_ size : CGSize) { x = Double(size.width); y = Double(size.height) }
+    init(_ vector : CGVector) { x = Double(vector.dx); y = Double(vector.dy) }
     
     static func +=(lhs : inout XY, rhs : XY) { lhs.x += rhs.x; lhs.y += rhs.y }
     static func -=(lhs : inout XY, rhs : XY) { lhs.x -= rhs.x; lhs.y -= rhs.y }
@@ -49,6 +50,7 @@ struct XY {
     
     static func fromPolar(r : Double, theta : Double) -> XY { return XY(cos(theta) * r, sin(theta) * r) }
     
-    func toCGVector() -> CGVector { return CGVector(dx: x, dy: y) }
     func toCGPoint() -> CGPoint { return CGPoint(x: x, y: y) }
+    func toCGSize() -> CGSize { return CGSize(width: x, height: y) }
+    func toCGVector() -> CGVector { return CGVector(dx: x, dy: y) }
 }
