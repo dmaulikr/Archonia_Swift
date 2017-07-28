@@ -22,7 +22,7 @@ class MannaParticle {
         sprite.color = .white
         sprite.name = inName
         
-        let physicsBody = SKPhysicsBody(circleOfRadius: 0.5)
+        let physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Archon.rawValue | Axioms.PhysicsBitmask.Sensor.rawValue
         physicsBody.collisionBitMask = 0
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Manna.rawValue
