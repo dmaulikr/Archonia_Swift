@@ -13,44 +13,44 @@ import SpriteKit
 struct Forager {
     let squareSize = 30.0
 
-    let relativePositions : [XY]
+    let relativePositions : [CGPoint]
     let sprite : SKSpriteNode
     let scene : GameScene
     
-    var searchAnchor : XY
-    var targetPosition : XY
-    var trail : CBuffer<XY>
+    var searchAnchor : CGPoint
+    var targetPosition : CGPoint
+    var trail : CBuffer<CGPoint>
     
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
     
     init(_ archon : Archon) {
         relativePositions = [
-            XY(0, squareSize), XY(squareSize, squareSize), XY(squareSize, 0),
-            XY(squareSize, -squareSize), XY(0, -squareSize), XY(-squareSize, -squareSize),
-            XY(-squareSize, 0), XY(-squareSize, squareSize)
+            CGPoint(0, squareSize), CGPoint(squareSize, squareSize), CGPoint(squareSize, 0),
+            CGPoint(squareSize, -squareSize), CGPoint(0, -squareSize), CGPoint(-squareSize, -squareSize),
+            CGPoint(-squareSize, 0), CGPoint(-squareSize, squareSize)
         ]
         
         sprite = archon.sprite
         scene = sprite.parent as! GameScene
         
-        searchAnchor = XY(sprite.position)
+        searchAnchor = sprite.position
         targetPosition = searchAnchor
-        trail = CBuffer<XY>(baseElement: XY(), howManyElements: 8)
+        trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
     }
 
     init(_ creeper : Creeper) {
         relativePositions = [
-            XY(0, squareSize), XY(squareSize, squareSize), XY(squareSize, 0),
-            XY(squareSize, -squareSize), XY(0, -squareSize), XY(-squareSize, -squareSize),
-            XY(-squareSize, 0), XY(-squareSize, squareSize)
+            CGPoint(0, squareSize), CGPoint(squareSize, squareSize), CGPoint(squareSize, 0),
+            CGPoint(squareSize, -squareSize), CGPoint(0, -squareSize), CGPoint(-squareSize, -squareSize),
+            CGPoint(-squareSize, 0), CGPoint(-squareSize, squareSize)
         ]
         
         sprite = creeper.sprite
         scene = sprite.parent as! GameScene
         
-        searchAnchor = XY(sprite.position)
+        searchAnchor = sprite.position
         targetPosition = searchAnchor
-        trail = CBuffer<XY>(baseElement: XY(), howManyElements: 8)
+        trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
     }
     
     func computeMovementConstraint() -> MovementConstraint {
@@ -68,7 +68,7 @@ struct Forager {
     mutating func computeMovementTarget(_ constraint : MovementConstraint) {
         let bestChoices = populateMovementChoices(constraint)
         var acceptableChoices = [Int](), fallbacks = [Int]()
-        var candidateTarget : XY
+        var candidateTarget : CGPoint
         
         for i in 0 ..< bestChoices.count {
             candidateTarget = relativePositions[bestChoices[i]] + searchAnchor
@@ -100,10 +100,10 @@ struct Forager {
         targetPosition = candidateTarget
     }
     
-    func doWeRemember(point: XY) -> Bool {
+    func doWeRemember(point: CGPoint) -> Bool {
         var weRememberIt = false
         
-        let _ = self.trail.forEach(callback: { (_: Int, value: XY) -> Bool in
+        let _ = self.trail.forEach(callback: { (_: Int, value: CGPoint) -> Bool in
             if point == value { weRememberIt = true; return false } else { return true }
         })
         

@@ -10,10 +10,6 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-extension CGSize {
-    static func *(lhs : CGSize, rhs : NSNumber) -> CGSize { return CGSize(width: lhs.width * CGFloat(rhs), height: lhs.height * CGFloat(rhs)) }
-}
-
 class Creeper {
     var forager: Forager! = nil
     let originalSize: CGSize
@@ -21,18 +17,18 @@ class Creeper {
     let sprite: SKSpriteNode
     let nose: SKNode
     
-    init(inScene: GameScene) {
+    init(inScene: GameScene, inTexture: SKTexture) {
         scene = inScene
         
-        sprite = SKSpriteNode(imageNamed: "creeper")
+        sprite = SKSpriteNode(texture: inTexture)
         sprite.name = String(Axioms.nextUniqueObjectID())
-        sprite.position = XY.randomPoint(range: inScene.size).toCGPoint()
+        sprite.position = CGPoint.randomPoint(range: inScene.size)
         sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
         sprite.colorBlendFactor = 1
 
         originalSize = sprite.size
         sprite.scale(to: sprite.size * 0.02)
-
+        
         scene.addChild(sprite)
         
         nose = SKNode()
@@ -56,10 +52,10 @@ class Creeper {
         
         forager.tick()
         
-        let distance = forager.targetPosition.getDistanceTo(XY(sprite.position))
+        let distance = Double(forager.targetPosition.getDistanceTo(sprite.position))
         let speed = 10.0
         
-        let move = SKAction.move(to: forager.targetPosition.toCGPoint(), duration: distance / speed)
+        let move = SKAction.move(to: forager.targetPosition, duration: distance / speed)
         
         let next = SKAction.run {
             self.sprite.removeAllActions()

@@ -10,6 +10,7 @@
 		D42EFB6A1F27B80E00D42D42 /* Forager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB691F27B80E00D42D42 /* Forager.swift */; };
 		D42EFB6C1F27CA7600D42D42 /* CBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */; };
 		D42EFBBF1F327DEA00D42D42 /* Creeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBBE1F327DEA00D42D42 /* Creeper.swift */; };
+		D42EFBC91F33D69D00D42D42 /* Archon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10171F2646D900FD239E /* Archon.swift */; };
 		D48239701F27AE4600E3ED67 /* XY.swift in Sources */ = {isa = PBXBuildFile; fileRef = D482396F1F27AE4600E3ED67 /* XY.swift */; };
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
@@ -18,7 +19,6 @@
 		D4AF0FFE1F2644D400FD239E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FFD1F2644D400FD239E /* Assets.xcassets */; };
 		D4AF10011F2644D400FD239E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FFF1F2644D400FD239E /* Main.storyboard */; };
 		D4AF100C1F2644D400FD239E /* Archonia_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF100B1F2644D400FD239E /* Archonia_SwiftTests.swift */; };
-		D4AF10181F2646D900FD239E /* Archon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10171F2646D900FD239E /* Archon.swift */; };
 		D4AF101F1F265A8000FD239E /* MannaParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF101E1F265A8000FD239E /* MannaParticle.swift */; };
 		D4AF10211F265DDC00FD239E /* MannaGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10201F265DDC00FD239E /* MannaGenerator.swift */; };
 		D4AF10231F265FD500FD239E /* Axioms.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10221F265FD500FD239E /* Axioms.swift */; };
@@ -252,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D42EFBC91F33D69D00D42D42 /* Archon.swift in Sources */,
 				D42EFBBF1F327DEA00D42D42 /* Creeper.swift in Sources */,
 				D4AF10231F265FD500FD239E /* Axioms.swift in Sources */,
 				D4AF0FFC1F2644D400FD239E /* ViewController.swift in Sources */,
@@ -260,7 +261,6 @@
 				D4AF0FFA1F2644D400FD239E /* GameScene.swift in Sources */,
 				D42EFB6C1F27CA7600D42D42 /* CBuffer.swift in Sources */,
 				D48239701F27AE4600E3ED67 /* XY.swift in Sources */,
-				D4AF10181F2646D900FD239E /* Archon.swift in Sources */,
 				D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */,
 				D4AF101F1F265A8000FD239E /* MannaParticle.swift in Sources */,
 			);

@@ -22,8 +22,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            archons[name] = Archon(scene: self, name: name)
 //        }
         
-        for _ in 0 ..< 25 {
-            let creeper = Creeper(inScene: self)
+        let texture = SKTexture(imageNamed: "creeper")
+
+        for _ in 0 ..< 250 {
+            let creeper = Creeper(inScene: self, inTexture: texture)
             creepers[creeper.sprite.name!] = creeper
         }
         

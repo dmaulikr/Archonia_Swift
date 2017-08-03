@@ -27,7 +27,7 @@ class Archon {
         mannaGenerator = inScene.mannaGenerator!
         
         sprite = SKSpriteNode(imageNamed: "archon15")
-        sprite.position = XY.randomPoint(range: inScene.size).toCGPoint()
+        sprite.position = CGPoint.randomPoint(range: inScene.size)
         sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
         sprite.colorBlendFactor = 1
         
@@ -81,7 +81,7 @@ class Archon {
         if showForagingDebug {
             let gridArrayIndex = forager!.trail.getIndexOfNewestElement()
             let square = grid[gridArrayIndex]
-            square.position = forager!.targetPosition.toCGPoint()
+            square.position = forager!.targetPosition
             square.alpha = 1
             
             for i in 0 ..< 8 {
@@ -98,8 +98,8 @@ class Archon {
         let button = sprite.childNode(withName: name)!
         button.physicsBody!.velocity = CGVector.zero
         
-        let impulse = XY(forager!.targetPosition - XY(sprite.position)).normalized()
-        sprite.physicsBody?.applyImpulse(impulse.toCGVector())
+        let impulse = CGVector(forager!.targetPosition - sprite.position).normalized()
+        sprite.physicsBody?.applyImpulse(impulse)
     }
     
     private func setupGrid(scene inScene : GameScene) {
@@ -177,7 +177,7 @@ class Archon {
         
         let v = CGVector(dx: x, dy: y)
         let a = Double(sqrt(pow(v.dx, 2) + pow(v.dy, 2)))
-        let b = XY(XY(v) / a).toCGVector()
+        let b = v / a
         
         myBody.velocity = CGVector.zero
         
