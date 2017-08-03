@@ -69,5 +69,11 @@ class Creeper {
         actions.append(movementGroup)
         
         sprite.run(SKAction.sequence(actions))
+        
+        let a = SKAction.reach(to: forager.targetPosition, rootNode: sprite, duration: distance / speed)
+        let b = SKAction.run { self.nose.removeAllActions() }
+        let c = SKAction.sequence([a, b])
+        
+        nose.run(c)
     }
 }

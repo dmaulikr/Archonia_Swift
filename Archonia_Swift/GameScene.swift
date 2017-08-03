@@ -24,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let texture = SKTexture(imageNamed: "creeper")
 
-        for _ in 0 ..< 250 {
+        for _ in 0 ..< 25 {
             let creeper = Creeper(inScene: self, inTexture: texture)
             creepers[creeper.sprite.name!] = creeper
         }
