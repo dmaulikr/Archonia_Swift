@@ -22,7 +22,7 @@ struct Forager {
     var trail : CBuffer<XY>
     
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
-
+    
     init(_ archon : Archon) {
         relativePositions = [
             XY(0, squareSize), XY(squareSize, squareSize), XY(squareSize, 0),
@@ -31,6 +31,21 @@ struct Forager {
         ]
         
         sprite = archon.sprite
+        scene = sprite.parent as! GameScene
+        
+        searchAnchor = XY(sprite.position)
+        targetPosition = searchAnchor
+        trail = CBuffer<XY>(baseElement: XY(), howManyElements: 8)
+    }
+
+    init(_ creeper : Creeper) {
+        relativePositions = [
+            XY(0, squareSize), XY(squareSize, squareSize), XY(squareSize, 0),
+            XY(squareSize, -squareSize), XY(0, -squareSize), XY(-squareSize, -squareSize),
+            XY(-squareSize, 0), XY(-squareSize, squareSize)
+        ]
+        
+        sprite = creeper.sprite
         scene = sprite.parent as! GameScene
         
         searchAnchor = XY(sprite.position)

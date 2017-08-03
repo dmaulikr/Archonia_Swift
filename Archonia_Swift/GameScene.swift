@@ -11,14 +11,20 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var archons = [String : Archon]()
+    var creepers = [String : Creeper]()
     var mannaGenerator : MannaGenerator!
     
     override func didMove(to view: SKView) {
         mannaGenerator = MannaGenerator(scene: self)
         
+//        for _ in 0 ..< 1 {
+//            let name = String(Axioms.nextUniqueObjectID())
+//            archons[name] = Archon(scene: self, name: name)
+//        }
+        
         for _ in 0 ..< 25 {
-            let name = String(Axioms.nextUniqueObjectID())
-            archons[name] = Archon(scene: self, name: name)
+            let creeper = Creeper(inScene: self)
+            creepers[creeper.sprite.name!] = creeper
         }
         
         physicsWorld.contactDelegate = self
