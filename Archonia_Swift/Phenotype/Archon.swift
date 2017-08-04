@@ -12,6 +12,7 @@ import SpriteKit
 
 class Archon {
     var forager: Forager! = nil
+    let genome: Genome
     let scene: GameScene
     let sprite: SKSpriteNode
     
@@ -22,6 +23,8 @@ class Archon {
     init(inScene: GameScene) {
         Archon.loadTextures()
         
+        genome = Genome(inheritFrom: Genome.primordialGenome)
+        
         scene = inScene
         
         sprite = SKSpriteNode(texture: Archon.spriteTexture)
@@ -29,6 +32,7 @@ class Archon {
         sprite.position = CGPoint.randomPoint(range: inScene.size)
         sprite.color = NSColor(hue: 240 / 360, saturation: 1, brightness: 0.6, alpha: 1)
         sprite.colorBlendFactor = 1
+        sprite.scale(to: sprite.size * 0.75)
 
         scene.addChild(sprite)
 
@@ -65,7 +69,7 @@ class Archon {
         forager.tick()
         
         let distance = Double(forager.targetPosition.getDistanceTo(sprite.position))
-        let speed = 50.0
+        let speed = (genome.genes["speed"]! as! ScalarGene).value
         
         let move = SKAction.move(to: forager.targetPosition, duration: distance / speed)
         

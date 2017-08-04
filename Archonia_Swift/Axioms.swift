@@ -38,4 +38,8 @@ struct Axioms {
     static func randomInt(_ min: Int, _ max: Int) -> Int {
         return GKRandomDistribution(lowestValue: min, highestValue: max - 1).nextInt()
     }
+    
+    static func randomBool() -> Bool {
+        return GKRandomDistribution(lowestValue: 0, highestValue: 1).nextBool()
+    }
 }

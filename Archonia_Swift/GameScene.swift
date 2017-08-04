@@ -22,6 +22,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         physicsWorld.contactDelegate = self
+        
+        Cosmos.shared.momentOfCreation = false
     }
     
     override func update(_ currentTime: TimeInterval) {
