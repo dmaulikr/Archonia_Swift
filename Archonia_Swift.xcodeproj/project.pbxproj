@@ -9,8 +9,7 @@
 /* Begin PBXBuildFile section */
 		D42EFB6A1F27B80E00D42D42 /* Forager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB691F27B80E00D42D42 /* Forager.swift */; };
 		D42EFB6C1F27CA7600D42D42 /* CBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */; };
-		D42EFBBF1F327DEA00D42D42 /* Creeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBBE1F327DEA00D42D42 /* Creeper.swift */; };
-		D42EFBC91F33D69D00D42D42 /* Archon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF10171F2646D900FD239E /* Archon.swift */; };
+		D42EFBCB1F34D7E400D42D42 /* Archon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBCA1F34D7E400D42D42 /* Archon.swift */; };
 		D48239701F27AE4600E3ED67 /* XY.swift in Sources */ = {isa = PBXBuildFile; fileRef = D482396F1F27AE4600E3ED67 /* XY.swift */; };
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
@@ -37,7 +36,7 @@
 /* Begin PBXFileReference section */
 		D42EFB691F27B80E00D42D42 /* Forager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Forager.swift; path = Phenotype/Forager.swift; sourceTree = "<group>"; };
 		D42EFB6B1F27CA7600D42D42 /* CBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBuffer.swift; path = Minions/CBuffer.swift; sourceTree = "<group>"; };
-		D42EFBBE1F327DEA00D42D42 /* Creeper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Creeper.swift; path = Phenotype/Creeper.swift; sourceTree = "<group>"; };
+		D42EFBCA1F34D7E400D42D42 /* Archon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Archon.swift; path = Phenotype/Archon.swift; sourceTree = "<group>"; };
 		D482396F1F27AE4600E3ED67 /* XY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XY.swift; path = Minions/XY.swift; sourceTree = "<group>"; };
 		D4AF0FF01F2644D400FD239E /* Archonia_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Archonia_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF0FF31F2644D400FD239E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +49,6 @@
 		D4AF10071F2644D400FD239E /* Archonia_SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Archonia_SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF100B1F2644D400FD239E /* Archonia_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archonia_SwiftTests.swift; sourceTree = "<group>"; };
 		D4AF100D1F2644D400FD239E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D4AF10171F2646D900FD239E /* Archon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Archon.swift; path = Phenotype/Archon.swift; sourceTree = "<group>"; };
 		D4AF101E1F265A8000FD239E /* MannaParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MannaParticle.swift; path = Cosmos/MannaParticle.swift; sourceTree = "<group>"; };
 		D4AF10201F265DDC00FD239E /* MannaGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MannaGenerator.swift; path = Cosmos/MannaGenerator.swift; sourceTree = "<group>"; };
 		D4AF10221F265FD500FD239E /* Axioms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Axioms.swift; sourceTree = "<group>"; };
@@ -122,9 +120,8 @@
 		D4AF10161F2646BF00FD239E /* Phenotype */ = {
 			isa = PBXGroup;
 			children = (
-				D4AF10171F2646D900FD239E /* Archon.swift */,
+				D42EFBCA1F34D7E400D42D42 /* Archon.swift */,
 				D42EFB691F27B80E00D42D42 /* Forager.swift */,
-				D42EFBBE1F327DEA00D42D42 /* Creeper.swift */,
 			);
 			name = Phenotype;
 			sourceTree = "<group>";
@@ -252,8 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D42EFBC91F33D69D00D42D42 /* Archon.swift in Sources */,
-				D42EFBBF1F327DEA00D42D42 /* Creeper.swift in Sources */,
+				D42EFBCB1F34D7E400D42D42 /* Archon.swift in Sources */,
 				D4AF10231F265FD500FD239E /* Axioms.swift in Sources */,
 				D4AF0FFC1F2644D400FD239E /* ViewController.swift in Sources */,
 				D42EFB6A1F27B80E00D42D42 /* Forager.swift in Sources */,

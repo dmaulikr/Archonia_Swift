@@ -37,21 +37,6 @@ struct Forager {
         targetPosition = searchAnchor
         trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
     }
-
-    init(_ creeper : Creeper) {
-        relativePositions = [
-            CGPoint(0, squareSize), CGPoint(squareSize, squareSize), CGPoint(squareSize, 0),
-            CGPoint(squareSize, -squareSize), CGPoint(0, -squareSize), CGPoint(-squareSize, -squareSize),
-            CGPoint(-squareSize, 0), CGPoint(-squareSize, squareSize)
-        ]
-        
-        sprite = creeper.sprite
-        scene = sprite.parent as! GameScene
-        
-        searchAnchor = sprite.position
-        targetPosition = searchAnchor
-        trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
-    }
     
     func computeMovementConstraint() -> MovementConstraint {
         var constraint = MovementConstraint.random
