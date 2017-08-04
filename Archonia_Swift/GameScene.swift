@@ -17,8 +17,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         mannaGenerator = MannaGenerator(scene: self)
         
         for _ in 0 ..< 25 {
-            let archon = Archon(inScene: self)
-            archons[archon.sprite.name!] = archon
+            do {
+                let archon = try Archon(inScene: self)
+                archons[archon.sprite.name!] = archon
+            } catch BirthDefect.GeneValueLessThanZero {
+                print("Birth defect")
+            } catch {
+                fatalError()
+            }
         }
         
         physicsWorld.contactDelegate = self

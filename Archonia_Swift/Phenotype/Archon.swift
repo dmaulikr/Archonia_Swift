@@ -20,10 +20,10 @@ class Archon {
     static var spriteTexture: SKTexture!
     static var buttonTexture: SKTexture!
     
-    init(inScene: GameScene) {
+    init(inScene: GameScene) throws {
         Archon.loadTextures()
         
-        genome = Genome(inheritFrom: Genome.primordialGenome)
+        genome = try Genome(inheritFrom: Genome.primordialGenome)
         
         scene = inScene
         

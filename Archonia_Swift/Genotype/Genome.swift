@@ -15,17 +15,11 @@ struct Genome {
     
     init(raw: [String : Gene]) { genes = raw }
     
-    init(inheritFrom: Genome) {
+    init(inheritFrom: Genome) throws {
         var workingCopy = [String : Gene]()
         
         for (name, parentGene) in inheritFrom.genes {
-            do {
-                try workingCopy[name] = ScalarGene(parentGene: parentGene as! ScalarGene)
-            } catch BirthDefect.GeneValueLessThanZero {
-                print("Birth defect")
-            } catch {
-                fatalError()
-            }
+            try workingCopy[name] = ScalarGene(parentGene: parentGene as! ScalarGene)
         }
         
         genes = workingCopy
