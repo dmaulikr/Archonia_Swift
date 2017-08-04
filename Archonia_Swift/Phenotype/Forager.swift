@@ -11,7 +11,7 @@ import GameplayKit
 import SpriteKit
 
 struct Forager {
-    let squareSize = 30.0
+    let squareSize: Double
 
     let relativePositions : [CGPoint]
     let sprite : SKSpriteNode
@@ -24,6 +24,8 @@ struct Forager {
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
     
     init(_ archon : Archon) {
+        squareSize = (archon.genome.genes["forageGridSize"]! as! ScalarGene).value
+        
         relativePositions = [
             CGPoint(0, squareSize), CGPoint(squareSize, squareSize), CGPoint(squareSize, 0),
             CGPoint(squareSize, -squareSize), CGPoint(0, -squareSize), CGPoint(-squareSize, -squareSize),
@@ -41,11 +43,11 @@ struct Forager {
     func computeMovementConstraint() -> MovementConstraint {
         var constraint = MovementConstraint.random
         
-        if sprite.position.x < 0 { constraint = .rightOnly }
-        else if sprite.position.x > scene.size.width { constraint = .leftOnly }
+        if sprite.position.x - CGFloat(squareSize) < 0 { constraint = .rightOnly }
+        else if sprite.position.x + CGFloat(squareSize) > scene.size.width { constraint = .leftOnly }
         
-        if sprite.position.y < 0 { constraint = .upOnly }
-        else if sprite.position.y > scene.size.height { constraint = .downOnly }
+        if sprite.position.y - CGFloat(squareSize) < 0 { constraint = .upOnly }
+        else if sprite.position.y + CGFloat(squareSize) > scene.size.height { constraint = .downOnly }
         
         return constraint
     }

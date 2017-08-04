@@ -10,6 +10,7 @@ struct Genome {
     let genes: [String : Gene]
     
     static let primordialGenome = Genome(raw: [
+        "forageGridSize" : ScalarGene(raw: 30),
         "speed" : ScalarGene(raw: 50)
     ])
     
