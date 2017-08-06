@@ -13,6 +13,7 @@ import SpriteKit
 class MannaParticle {
     var sprite: SKSpriteNode
     let limitPoint: CGSize
+    var isBeingEaten = false
     var isCoherent = false
     
     init(scene inScene : GameScene, name inName : String) {
@@ -35,6 +36,7 @@ class MannaParticle {
     
     func cohere() {
         isCoherent = true
+        isBeingEaten = false
 
         sprite.position = CGPoint.randomPoint(range: limitPoint)
 

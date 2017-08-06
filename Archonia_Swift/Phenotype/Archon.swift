@@ -71,7 +71,7 @@ class Archon {
         var actions = [SKAction]()
         
         if firstTime { forager = Forager(self) }
-        else { actions.append(SKAction.wait(forDuration: 1.5, withRange: 3)) }
+        else { actions.append(SKAction.wait(forDuration: 0.5, withRange: 0.5)) }
         
         forager.tick()
         
@@ -142,6 +142,7 @@ extension Archon {
     
     func sense(_ mannaParticle: MannaParticle) {
 //        print("Archon \(sprite.name!) sensing manna \(mannaParticle.sprite.name!)")
+        guard !mannaParticle.isBeingEaten else { return }
         
         if state == .Foraging { sprite.removeAllActions(); state = .PursuingManna }
         
@@ -165,7 +166,16 @@ extension Archon {
     
     func contact(_ mannaParticle: MannaParticle) {
 //        print("Archon \(sprite.name!) contacting manna \(mannaParticle.sprite.name!)")
-        mannaParticle.decohere()
+        guard !mannaParticle.isBeingEaten else { return }
+        
+        mannaParticle.isBeingEaten = true
+        
+        sprite.removeAllActions()
+        
+        let wait = SKAction.wait(forDuration: 1)
+        let next = SKAction.run { mannaParticle.decohere(); self.pursueManna() }
+        let sequence = SKAction.sequence([wait, next])
+        sprite.run(sequence)
     }
     
     func pursueManna() {
