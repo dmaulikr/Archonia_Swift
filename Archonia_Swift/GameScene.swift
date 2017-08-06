@@ -35,4 +35,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         mannaGenerator.tick()
     }
+    
+    override func mouseUp(with event: NSEvent) {
+        scene!.isPaused = !scene!.isPaused
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else {
+            fatalError("Unexpected 0")
+        }
+        
+        if let archonA = archons[nodeA.name!] {
+            if let archonB = archons[nodeB.name!] {
+                if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
+                    archonA.contact(archonB)
+                    archonB.contact(archonA)
+                } else if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
+                    archonA.sense(archonB)
+                } else {
+                    fatalError("Unexpected 1 \(nodeA.name!) - \(nodeB.name!)")
+                }
+            } else if let manna = mannaGenerator.manna[nodeB.name!] {
+                if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
+                    archonA.contact(manna)
+                } else if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
+                    archonA.sense(manna)
+                } else {
+                    fatalError("Unexpected 2 \(nodeA.name!) - \(nodeB.name!)")
+                }
+            } else {
+                fatalError("Unexpected 3")
+            }
+        } else if let manna = mannaGenerator.manna[nodeA.name!] {
+            if let archon = archons[nodeB.name!] {
+                if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
+                    archon.contact(manna)
+                } else if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
+                    archon.sense(manna)
+                } else {
+                    fatalError("Unexpected 4 \(nodeA.name!) - \(nodeB.name!)")
+                }
+            } else {
+                fatalError("Unexpected 5")
+            }
+        } else {
+            fatalError("Unexpected 6")
+        }
+    }
 }

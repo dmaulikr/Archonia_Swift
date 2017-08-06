@@ -22,7 +22,7 @@ class MannaParticle {
         sprite.name = inName
         
         let physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
-        physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Archon.rawValue | Axioms.PhysicsBitmask.Sensor.rawValue
+        physicsBody.contactTestBitMask = 0
         physicsBody.collisionBitMask = 0
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Manna.rawValue
         sprite.physicsBody = physicsBody
@@ -55,15 +55,14 @@ class MannaParticle {
 
         isCoherent = false
         
-        sprite.position = CGPoint(x: -100, y: -100)
-        
         let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
         let r = Float(q.nextInt())
         let s = TimeInterval(r / 1000.0)
         
+        let p = SKAction.run({self.sprite.position = CGPoint(x: -100, y: -100)})
         let w = SKAction.wait(forDuration: s)
         let d = SKAction.run({self.cohere()})
-        let g = SKAction.sequence([w, d])
+        let g = SKAction.sequence([p, w, d])
         
         sprite.removeAllActions()
         sprite.run(g)
