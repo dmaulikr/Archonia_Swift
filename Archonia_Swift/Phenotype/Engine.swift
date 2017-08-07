@@ -47,8 +47,6 @@ extension Engine {
     func processStimuli() {
         guard !archon.sprite.hasActions() else { fatalError() }
         
-        print("processStimuli()")
-        
         if stimuli.count == 0 { state = .Foraging; forage(reset: true) }
         else if let index = find(stimulus: "contact") { state = .EatingManna; eat(mannaParticle: index) }
         else if let index = find(stimulus: "sense") { state = .PursuingManna; pursue(mannaParticle: index) }
@@ -62,13 +60,11 @@ extension Engine {
         let mannaParticle = stimuli[atIndex].1 as! MannaParticle
         let expectedIncarnationNumber = stimuli[atIndex].2
 
-        print("Eat \(mannaParticle.sprite.name!); state = \(self.state)")
-
         if mannaParticle.incarnationNumber == expectedIncarnationNumber {
             mannaParticle.sprite.removeAllActions()
             
             let fadeOut = SKAction.fadeOut(withDuration: 0.25)
-            let eat = SKAction.run { print("Eating \(mannaParticle.sprite.name!); state = \(self.state)"); mannaParticle.decohere() }
+            let eat = SKAction.run { mannaParticle.decohere() }
             
             actions.append(contentsOf: [fadeOut, fadeOut.reversed(), eat])
         }
@@ -84,8 +80,6 @@ extension Engine {
     
     func forage(reset: Bool) {
         guard stimuli.count == 0 else { archon.sprite.removeAllActions(); processStimuli(); return }
-        
-        print("Foraging; state = \(self.state)")
         
         state = .Foraging
         
@@ -115,8 +109,6 @@ extension Engine {
         let mannaParticle = stimuli[atIndex].1 as! MannaParticle
         let expectedIncarnationNumber = stimuli[atIndex].2
 
-        print("Pursue \(mannaParticle.sprite.name!); state = \(self.state)")
-        
         // It's possible that we might sense a particle just before it rots
         // away, or is eaten by someone else, after which it would be reincarnated
         // and appear somewhere else, effectively a different particle.
@@ -124,9 +116,6 @@ extension Engine {
             let distance = Double(mannaParticle.sprite.position.getDistanceTo(archon.sprite.position))
             let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
             let duration = distance / speed
-            
-            let message = SKAction.run { print("Pursuing \(mannaParticle.sprite.name!); state = \(self.state)") }
-            actions.append(message)
             
             let move = SKAction.move(to: mannaParticle.sprite.position, duration: duration)
             actions.append(move)
@@ -180,8 +169,6 @@ extension Engine {
 
 extension Engine {
     func contactManna(_ mannaParticle: MannaParticle) {
-        print("Contact \(mannaParticle.sprite.name!); state = \(self.state)", separator: "", terminator: "")
-        
         // I'm guessing that we could get a contact from a manna particle that
         // we had not previously sensed, if a manna particle were to cohere right
         // on top of us. Of course, we should be getting a sense notification
@@ -189,11 +176,9 @@ extension Engine {
         // that we're already touching, which, I think, we'll do, but then we won't
         // eat it, because we won't get another contact notification. Not a big
         // deal; come back to it
-        guard let index = find(who: mannaParticle) else { print("...unknown"); return }
+        guard let index = find(who: mannaParticle) else { return }
         
         stimuli[index].0 = "contact"
-        
-        print("...changed")
         
         // If we're not already in the middle of a meal, stop whatever it is we're
         // doing and eat
@@ -204,12 +189,8 @@ extension Engine {
     }
 
     func senseManna(_ mannaParticle: MannaParticle) {
-        print("Sense \(mannaParticle.sprite.name!); state = \(self.state)", separator: "", terminator: "")
-
-        mannaParticle.sprite.color = .red
         if find(who: mannaParticle) == nil {
             stimuli.append(("sense", mannaParticle, mannaParticle.incarnationNumber))
-            print("...added")
             
 #if false
             let label = SKLabelNode(text: "\(mannaParticle.sprite.name!)")
@@ -219,8 +200,6 @@ extension Engine {
             label.fontName = "Courier-Bold"
             mannaParticle.sprite.addChild(label)
 #endif
-        } else {
-            print("...already known")
         }
 
         // If we've sensed food, stop foraging and go after it right away

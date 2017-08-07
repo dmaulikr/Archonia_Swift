@@ -34,11 +34,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func mouseUp(with event: NSEvent) {
         scene!.isPaused = !scene!.isPaused
-        
-        let touched = scene!.nodes(at: event.location(in: scene!))
-        for t in touched {
-            print(t.name!)
-        }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {

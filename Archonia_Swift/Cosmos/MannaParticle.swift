@@ -53,8 +53,7 @@ class MannaParticle: Edible {
         
         sprite.removeAllActions()
         sprite.run(g)
-        
-        sprite.color = .white
+
         incarnationNumber = incarnationNumber &+ 1
     }
     
