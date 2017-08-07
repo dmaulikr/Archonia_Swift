@@ -101,11 +101,11 @@ extension Engine {
         }
         
         totalThreatVector.normalize()
-        totalThreatVector *= -forager.squareSize
+        totalThreatVector *= -forager.forageRadius
         
         let targetPosition = archon.sprite.position + CGPoint(totalThreatVector)
         let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
-        let duration = forager.squareSize / speed
+        let duration = forager.forageRadius / speed
         
         let move = SKAction.move(to: targetPosition, duration: duration)
         let next = SKAction.run { self.forage(reset: true) }
@@ -122,7 +122,7 @@ extension Engine {
         
         var actions = [SKAction]()
         
-        if reset { forager = Forager(archon); state = .Foraging }
+        if reset { forager.reset(); state = .Foraging }
         else { actions.append(SKAction.wait(forDuration: 0.5, withRange: 0.5)) }
         
         forager.tick()

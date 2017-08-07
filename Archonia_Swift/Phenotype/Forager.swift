@@ -10,23 +10,20 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-struct Forager {
+class Forager {
     let archon: Archon
     let forageRadius: Double
 
     let relativePositions: [CGPoint]
     
-    var searchAnchor: CGPoint
-    var targetPosition: CGPoint
+    var searchAnchor = CGPoint.zero
+    var targetPosition = CGPoint.zero
     var trail: CBuffer<CGPoint>!
     
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
     
     init(_ inArchon : Archon) {
         archon = inArchon
-        searchAnchor = archon.sprite.position
-        targetPosition = CGPoint.zero
-        trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
         
         forageRadius = (archon.genome.genes["forageGridSize"]! as! ScalarGene).value
         
@@ -37,6 +34,12 @@ struct Forager {
         }
         
         relativePositions = workPositions
+        reset()
+    }
+    
+    func reset() {
+        searchAnchor = archon.sprite.position
+        trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
     }
     
     func computeMovementConstraint() -> MovementConstraint {
@@ -51,7 +54,7 @@ struct Forager {
         return constraint
     }
     
-    mutating func computeMovementTarget(_ constraint : MovementConstraint) {
+    func computeMovementTarget(_ constraint : MovementConstraint) {
         let bestChoices = populateMovementChoices(constraint)
         var acceptableChoices = [Int](), fallbacks = [Int]()
         var candidateTarget : CGPoint
@@ -111,7 +114,7 @@ struct Forager {
         }
     }
     
-    mutating func tick() {
+    func tick() {
         let constraint = computeMovementConstraint()
         computeMovementTarget(constraint)
     }
