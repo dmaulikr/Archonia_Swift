@@ -72,7 +72,8 @@ extension Engine {
         let next = SKAction.run { self.forage(reset: true) }
         actions.append(next)
         
-        archon.sprite.run(SKAction.sequence(actions))
+        let button = archon.sprite.childNode(withName: archon.sprite.name!)!
+        button.run(SKAction.sequence(actions))
         
         // Note: remove this stimulus immediately; don't wait for actions to finish
         stimuli.remove(at: atIndex)
