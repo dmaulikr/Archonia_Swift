@@ -11,8 +11,8 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-class Archon {
-    var forager: Forager! = nil
+class Archon: Edible {
+    var engine: Engine! = nil
     let genome: Genome
     let scene: GameScene
     var sensedManna = [(MannaParticle, CGPoint)]()
@@ -46,6 +46,8 @@ class Archon {
         physicsBody.collisionBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         sprite.physicsBody = physicsBody
+        
+        engine = Engine(self)
 
         let sensorBody = setupButton()
         
@@ -53,7 +55,7 @@ class Archon {
         let joint = SKPhysicsJointFixed.joint(withBodyA: physicsBody, bodyB: sensorBody, anchor: connectionPoint)
         scene.physicsWorld.add(joint)
         
-        forage(firstTime: true)
+        engine.launch()
     }
     
     static private func loadTextures() {
@@ -63,35 +65,6 @@ class Archon {
         Archon.buttonTexture = SKTexture(imageNamed: "button6")
         
         Archon.texturesLoaded = true
-    }
-    
-    // Should be private, but Swift 3 won't let us access it from the extension;
-    // the Swift 4 doc suggests that this will be fixed soon
-    func forage(firstTime: Bool) {
-        var actions = [SKAction]()
-        
-        if firstTime { forager = Forager(self) }
-        else { actions.append(SKAction.wait(forDuration: 0.5, withRange: 0.5)) }
-        
-        forager.tick()
-        
-        let p = sprite.position
-        let distance = Double(forager.targetPosition.getDistanceTo(p))
-        let speed = (genome.genes["speed"]! as! ScalarGene).value
-        let duration = distance / speed
-        
-        let move = SKAction.move(to: forager.targetPosition, duration: duration)
-        let next = SKAction.run { self.forage(firstTime: false) }
-        
-        let movementSequence = SKAction.sequence([move, next])
-        
-        actions.append(movementSequence)
-        
-        sprite.run(SKAction.sequence(actions))
-        
-        state = .Foraging
-        
-//        drawDebugLine(from: sprite.position, to: forager.targetPosition, color: .green)
     }
     
     private func setupButton() -> SKPhysicsBody {
@@ -139,73 +112,8 @@ extension Archon {
     func sense(_ otherArchon: Archon) {
 //        print("Archon \(sprite.name!) sensing archon \(otherArchon.sprite.name!)")
     }
-    
-    func sense(_ mannaParticle: MannaParticle) {
-//        print("Archon \(sprite.name!) sensing manna \(mannaParticle.sprite.name!)")
-        guard !mannaParticle.isBeingEaten else { return }
-        
-        if state == .Foraging { sprite.removeAllActions(); state = .PursuingManna }
-        
-        // If we don't already know about this manna particle, append it to
-        // our array of particles to pursue
-        if sensedManna.index(where: { (alreadySensed, _) in
-            return alreadySensed.sprite.name! == mannaParticle.sprite.name!
-        }) == nil {
-            sensedManna.append((mannaParticle, mannaParticle.sprite.position))
-            
-//            drawDebugLine(from: sprite.position, to: mannaParticle.sprite.position, color: .white)
-        }
-        
-        // If we're not already pursuing, start another pursuit action
-        if !sprite.hasActions() { pursueManna() }
-    }
 
     func contact(_ otherArchon: Archon) {
 //        print("Archon \(sprite.name!) contacting archon \(otherArchon.sprite.name!)")
-    }
-    
-    func contact(_ mannaParticle: MannaParticle) {
-//        print("Archon \(sprite.name!) contacting manna \(mannaParticle.sprite.name!)")
-        guard !mannaParticle.isBeingEaten else { return }
-        
-        mannaParticle.isBeingEaten = true
-        
-        sprite.removeAllActions()
-        
-        let wait = SKAction.wait(forDuration: 1)
-        let next = SKAction.run { mannaParticle.decohere(); self.pursueManna() }
-        let sequence = SKAction.sequence([wait, next])
-        sprite.run(sequence)
-    }
-    
-    func pursueManna() {
-        if sensedMannaIndex < sensedManna.count {
-            var actions = [SKAction]()
-            let (mannaParticle, lastKnownPosition) = sensedManna[sensedMannaIndex]
-            let currentPosition = mannaParticle.sprite.position
-            
-            sensedMannaIndex += 1   // For next time
-            
-            // That is, if the manna we sensed hasn't been eaten and
-            // reincarnated somewhere else
-            if currentPosition == lastKnownPosition {
-                let distance = Double(currentPosition.getDistanceTo(sprite.position))
-                let speed = (genome.genes["speed"]! as! ScalarGene).value
-                let duration = distance / speed
-
-                let move = SKAction.move(to: currentPosition, duration: duration)
-                actions.append(move)
-            }
-            
-            let next = SKAction.run { self.pursueManna() }
-            actions.append(next)
-            
-            sprite.run(SKAction.sequence(actions))
-        } else {
-            sensedMannaIndex = 0
-            sensedManna.removeAll(keepingCapacity: true)
-            
-            sprite.run(SKAction.run({ self.forage(firstTime: true) }))
-        }
     }
 }

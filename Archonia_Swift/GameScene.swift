@@ -32,12 +32,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         Cosmos.shared.momentOfCreation = false
     }
     
-    override func update(_ currentTime: TimeInterval) {
-        mannaGenerator.tick()
-    }
-    
     override func mouseUp(with event: NSEvent) {
         scene!.isPaused = !scene!.isPaused
+        
+        let touched = scene!.nodes(at: event.location(in: scene!))
+        for t in touched {
+            print(t.name!)
+        }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -57,9 +58,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             } else if let manna = mannaGenerator.manna[nodeB.name!] {
                 if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
-                    archonA.contact(manna)
+                    archonA.engine.contactManna(manna)
                 } else if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
-                    archonA.sense(manna)
+                    archonA.engine.senseManna(manna)
                 } else {
                     fatalError("Unexpected 2 \(nodeA.name!) - \(nodeB.name!)")
                 }
@@ -69,9 +70,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if let manna = mannaGenerator.manna[nodeA.name!] {
             if let archon = archons[nodeB.name!] {
                 if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
-                    archon.contact(manna)
+                    archon.engine.contactManna(manna)
                 } else if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
-                    archon.sense(manna)
+                    archon.engine.senseManna(manna)
                 } else {
                     fatalError("Unexpected 4 \(nodeA.name!) - \(nodeB.name!)")
                 }

@@ -21,22 +21,6 @@ class MannaGenerator {
         }
     }
     
-    func detectCollision(name inName : String) -> Bool {
-        guard manna[inName] != nil else { fatalError("Manna not found?") }
-        
-        if eatenManna.contains(inName) { return false }
-        else { eatenManna.insert(inName); return true }
-    }
-    
-    func tick() {
-        for name in eatenManna {
-            guard let m = manna[name] else { fatalError("Manna not found?") }
-            m.collisionDetected()
-        }
-        
-        eatenManna.removeAll()
-    }
-    
     func getMannaParticle(_ name: String) -> MannaParticle {
         guard let p = manna[name] else { fatalError("wtf?") }
         return p

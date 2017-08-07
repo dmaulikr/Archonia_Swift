@@ -10,11 +10,12 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-class MannaParticle {
-    var sprite: SKSpriteNode
-    let limitPoint: CGSize
+class MannaParticle: Edible {
+    var incarnationNumber: Int = 0
     var isBeingEaten = false
     var isCoherent = false
+    let limitPoint: CGSize
+    var sprite: SKSpriteNode
     
     init(scene inScene : GameScene, name inName : String) {
         sprite = SKSpriteNode(imageNamed: "manna2")
@@ -31,6 +32,8 @@ class MannaParticle {
         inScene.addChild(sprite)
         limitPoint = inScene.size
         
+        sprite.isUserInteractionEnabled = true
+
         cohere()
     }
     
@@ -50,12 +53,27 @@ class MannaParticle {
         
         sprite.removeAllActions()
         sprite.run(g)
+        
+        sprite.color = .white
+        incarnationNumber = incarnationNumber &+ 1
     }
     
     func decohere() {
         guard isCoherent else { return }
 
         isCoherent = false
+        
+        if let label = sprite.childNode(withName: "label") {
+            let position = label.convert(label.position, to: sprite.parent! as! GameScene)
+            sprite.removeAllChildren()
+            (sprite.parent! as! GameScene).addChild(label)
+            label.position = position - CGPoint(x: 50, y: 50)
+            
+            let fade = SKAction.fadeOut(withDuration: 2)
+            let remove = SKAction.run { label.removeFromParent() }
+            let sequence = SKAction.sequence([fade, remove])
+            label.run(sequence)
+        }
         
         let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
         let r = Float(q.nextInt())
@@ -68,13 +86,5 @@ class MannaParticle {
         
         sprite.removeAllActions()
         sprite.run(g)
-    }
-    
-    func expire() {
-        decohere()
-    }
-    
-    func collisionDetected() {
-        decohere()
     }
 }

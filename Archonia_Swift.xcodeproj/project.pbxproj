@@ -13,6 +13,7 @@
 		D42EFBCE1F34FE2F00D42D42 /* Gene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBCD1F34FE2F00D42D42 /* Gene.swift */; };
 		D42EFBD01F35014100D42D42 /* Cosmos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBCF1F35014100D42D42 /* Cosmos.swift */; };
 		D42EFBD21F350E6A00D42D42 /* Genome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBD11F350E6A00D42D42 /* Genome.swift */; };
+		D42EFBD41F37866000D42D42 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EFBD31F37866000D42D42 /* Engine.swift */; };
 		D48239701F27AE4600E3ED67 /* XY.swift in Sources */ = {isa = PBXBuildFile; fileRef = D482396F1F27AE4600E3ED67 /* XY.swift */; };
 		D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AF0FF31F2644D400FD239E /* AppDelegate.swift */; };
 		D4AF0FF61F2644D400FD239E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D4AF0FF51F2644D400FD239E /* GameScene.sks */; };
@@ -43,6 +44,7 @@
 		D42EFBCD1F34FE2F00D42D42 /* Gene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gene.swift; path = Genotype/Gene.swift; sourceTree = "<group>"; };
 		D42EFBCF1F35014100D42D42 /* Cosmos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cosmos.swift; path = Cosmos/Cosmos.swift; sourceTree = "<group>"; };
 		D42EFBD11F350E6A00D42D42 /* Genome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Genome.swift; path = Genotype/Genome.swift; sourceTree = "<group>"; };
+		D42EFBD31F37866000D42D42 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Engine.swift; path = Phenotype/Engine.swift; sourceTree = "<group>"; };
 		D482396F1F27AE4600E3ED67 /* XY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XY.swift; path = Minions/XY.swift; sourceTree = "<group>"; };
 		D4AF0FF01F2644D400FD239E /* Archonia_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Archonia_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4AF0FF31F2644D400FD239E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				D42EFBCA1F34D7E400D42D42 /* Archon.swift */,
+				D42EFBD31F37866000D42D42 /* Engine.swift */,
 				D42EFB691F27B80E00D42D42 /* Forager.swift */,
 			);
 			name = Phenotype;
@@ -279,6 +282,7 @@
 				D42EFBCE1F34FE2F00D42D42 /* Gene.swift in Sources */,
 				D4AF0FF41F2644D400FD239E /* AppDelegate.swift in Sources */,
 				D4AF101F1F265A8000FD239E /* MannaParticle.swift in Sources */,
+				D42EFBD41F37866000D42D42 /* Engine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
