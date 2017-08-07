@@ -37,6 +37,13 @@ class MannaParticle: Edible {
         cohere()
     }
     
+    func beEaten() {
+        guard !isBeingEaten else { return }
+        
+        isBeingEaten = true
+        decohere()
+    }
+    
     func cohere() {
         isCoherent = true
         isBeingEaten = false
@@ -61,18 +68,6 @@ class MannaParticle: Edible {
         guard isCoherent else { return }
 
         isCoherent = false
-        
-        if let label = sprite.childNode(withName: "label") {
-            let position = label.convert(label.position, to: sprite.parent! as! GameScene)
-            sprite.removeAllChildren()
-            (sprite.parent! as! GameScene).addChild(label)
-            label.position = position - CGPoint(x: 50, y: 50)
-            
-            let fade = SKAction.fadeOut(withDuration: 2)
-            let remove = SKAction.run { label.removeFromParent() }
-            let sequence = SKAction.sequence([fade, remove])
-            label.run(sequence)
-        }
         
         let q = GKRandomDistribution(lowestValue: 500, highestValue: 2000)
         let r = Float(q.nextInt())
