@@ -15,10 +15,7 @@ class Archon: Edible {
     var engine: Engine! = nil
     let genome: Genome
     let scene: GameScene
-    var sensedManna = [(MannaParticle, CGPoint)]()
-    var sensedMannaIndex = 0
     let sprite: SKSpriteNode
-    var state: State = .Foraging
     
     static var texturesLoaded = false
     static var spriteTexture: SKTexture!
@@ -43,7 +40,7 @@ class Archon: Edible {
 
         let physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
         physicsBody.contactTestBitMask = Axioms.PhysicsBitmask.Archon.rawValue | Axioms.PhysicsBitmask.Manna.rawValue
-        physicsBody.collisionBitMask = Axioms.PhysicsBitmask.Archon.rawValue
+        physicsBody.collisionBitMask = 0
         physicsBody.categoryBitMask = Axioms.PhysicsBitmask.Archon.rawValue
         sprite.physicsBody = physicsBody
         
@@ -56,6 +53,14 @@ class Archon: Edible {
         scene.physicsWorld.add(joint)
         
         engine.launch()
+    }
+    
+    static func isArchonBody(_ physicsBody: SKPhysicsBody) -> Bool {
+        return (physicsBody.categoryBitMask & Axioms.PhysicsBitmask.Archon.rawValue) != 0
+    }
+    
+    static func isArchonSensor(_ physicsBody: SKPhysicsBody) -> Bool {
+        return (physicsBody.categoryBitMask & Axioms.PhysicsBitmask.Sensor.rawValue) != 0
     }
     
     static private func loadTextures() {
@@ -75,7 +80,7 @@ class Archon: Edible {
         sprite.addChild(button)
         
         let sensorBody = SKPhysicsBody(circleOfRadius: sprite.size.width * 2)
-        sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Manna.rawValue
+        sensorBody.contactTestBitMask = Axioms.PhysicsBitmask.Archon.rawValue | Axioms.PhysicsBitmask.Manna.rawValue
         sensorBody.collisionBitMask = 0
         sensorBody.categoryBitMask = Axioms.PhysicsBitmask.Sensor.rawValue
         
@@ -101,19 +106,5 @@ class Archon: Edible {
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([fadeIn, fadeOut, remove])
         line.run(sequence)
-    }
-}
-
-// Sense & contact manna & other archons
-
-extension Archon {
-    enum State { case Foraging, PursuingManna }
-    
-    func sense(_ otherArchon: Archon) {
-//        print("Archon \(sprite.name!) sensing archon \(otherArchon.sprite.name!)")
-    }
-
-    func contact(_ otherArchon: Archon) {
-//        print("Archon \(sprite.name!) contacting archon \(otherArchon.sprite.name!)")
     }
 }

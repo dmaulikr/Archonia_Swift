@@ -25,7 +25,7 @@ class Engine {
         forager = Forager(archon)
     }
     
-    enum State { case Foraging, PursuingManna, EatingManna }
+    enum State { case Foraging, PursuingManna, EatingManna, FleeingArchon }
 }
 
 extension Engine {
@@ -40,6 +40,20 @@ extension Engine {
     func find(who: Edible) -> Int? {
         return stimuli.index(where: { $0.1.sprite.name! == who.sprite.name! })
     }
+    
+    func findThreats() -> [Stimulus]? {
+        var threats: [Stimulus]? = nil
+        
+        for stimulus in stimuli {
+            if stimulus.1 is Archon {
+                if threats == nil { threats = [Stimulus]() }
+                
+                threats!.append(stimulus)
+            }
+        }
+        
+        return threats
+    }
 
     func launch() { forage(reset: true) }
     
@@ -47,6 +61,7 @@ extension Engine {
         guard !archon.sprite.hasActions() else { fatalError() }
         
         if stimuli.count == 0 { state = .Foraging; forage(reset: true) }
+        else if let threats = findThreats() { state = .FleeingArchon; flee(threats) }
         else if let index = find(stimulus: "contact") { state = .EatingManna; eat(mannaParticle: index) }
         else if let index = find(stimulus: "sense") { state = .PursuingManna; pursue(mannaParticle: index) }
         else { fatalError() }
@@ -72,11 +87,32 @@ extension Engine {
         let next = SKAction.run { self.forage(reset: true) }
         actions.append(next)
         
-        let button = archon.sprite.childNode(withName: archon.sprite.name!)!
-        button.run(SKAction.sequence(actions))
+        archon.sprite.run(SKAction.sequence(actions))
         
         // Note: remove this stimulus immediately; don't wait for actions to finish
         stimuli.remove(at: atIndex)
+    }
+    
+    func flee(_ threats: [Stimulus]) {
+        var totalThreatVector = CGVector.zero
+        
+        for threat in threats {
+            totalThreatVector += CGVector(threat.1.sprite.position - archon.sprite.position)
+        }
+        
+        totalThreatVector.normalize()
+        totalThreatVector *= -forager.squareSize
+        
+        let targetPosition = archon.sprite.position + CGPoint(totalThreatVector)
+        let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
+        let duration = forager.squareSize / speed
+        
+        let move = SKAction.move(to: targetPosition, duration: duration)
+        let next = SKAction.run { self.forage(reset: true) }
+        let sequence = SKAction.sequence([move, next])
+        
+        archon.sprite.removeAllActions()
+        archon.sprite.run(sequence)
     }
     
     func forage(reset: Bool) {
@@ -156,6 +192,16 @@ extension Engine {
             processStimuli()
         }
     }
+    
+    func senseArchon(_ otherArchon: Archon) {
+        if find(who: otherArchon) == nil {
+            stimuli.append(("sense", otherArchon, 0))
+        }
+
+        // Stop whatever we're doing and re-assess our situation
+        archon.sprite.removeAllActions()
+        processStimuli()
+    }
 
     func senseManna(_ mannaParticle: MannaParticle) {
         if find(who: mannaParticle) == nil {
@@ -167,5 +213,9 @@ extension Engine {
             archon.sprite.removeAllActions()
             processStimuli()
         }
+    }
+    
+    func unsenseArchon(_ otherArchon: Archon) {
+        if let index = find(who: otherArchon) { stimuli.remove(at: index) }
     }
 }

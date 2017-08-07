@@ -36,6 +36,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene!.isPaused = !scene!.isPaused
     }
     
+    func didEnd(_ contact: SKPhysicsContact) {
+        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else {
+            fatalError("Unexpected 0")
+        }
+        
+        if let archonA = archons[nodeA.name!], let archonB = archons[nodeB.name!] {
+            archonA.engine.unsenseArchon(archonB)
+            archonB.engine.unsenseArchon(archonA)
+        }
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else {
             fatalError("Unexpected 0")
@@ -43,18 +54,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if let archonA = archons[nodeA.name!] {
             if let archonB = archons[nodeB.name!] {
-                if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
-                    archonA.contact(archonB)
-                    archonB.contact(archonA)
-                } else if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
-                    archonA.sense(archonB)
+                if Archon.isArchonSensor(contact.bodyA) && Archon.isArchonSensor(contact.bodyB) {
+                    // Do nothing for sensor-sensor contact
+                } else if Archon.isArchonBody(contact.bodyA) && Archon.isArchonBody(contact.bodyB) {
+                    // Body-body contact is complicated
+                } else if Archon.isArchonSensor(contact.bodyA) {
+                    archonA.engine.senseArchon(archonB)
+                } else if Archon.isArchonBody(contact.bodyA) {
+                    archonB.engine.senseArchon(archonA)
                 } else {
                     fatalError("Unexpected 1 \(nodeA.name!) - \(nodeB.name!)")
                 }
             } else if let manna = mannaGenerator.manna[nodeB.name!] {
-                if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
+                if Archon.isArchonBody(contact.bodyA) {
                     archonA.engine.contactManna(manna)
-                } else if contact.bodyA.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
+                } else if Archon.isArchonSensor(contact.bodyA) {
                     archonA.engine.senseManna(manna)
                 } else {
                     fatalError("Unexpected 2 \(nodeA.name!) - \(nodeB.name!)")
@@ -64,9 +78,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         } else if let manna = mannaGenerator.manna[nodeA.name!] {
             if let archon = archons[nodeB.name!] {
-                if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Archon.rawValue {
+                if Archon.isArchonBody(contact.bodyB) {
                     archon.engine.contactManna(manna)
-                } else if contact.bodyB.categoryBitMask == Axioms.PhysicsBitmask.Sensor.rawValue {
+                } else if Archon.isArchonSensor(contact.bodyB) {
                     archon.engine.senseManna(manna)
                 } else {
                     fatalError("Unexpected 4 \(nodeA.name!) - \(nodeB.name!)")

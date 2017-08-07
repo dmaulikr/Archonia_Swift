@@ -55,6 +55,11 @@ protocol NewXY {
 
 extension NewXY {
     init<T : XYNumeric>(_ inX: T, _ inY: T) { self.init(); x = inX.toCGFloat(); y = inY.toCGFloat(); }
+    
+    static func +=(lhs : inout Self, rhs : NewXY) { lhs.x += rhs.x; lhs.y += rhs.y }
+    static func *=(lhs : inout Self, rhs : XYNumeric) { lhs.x *= rhs.toCGFloat(); lhs.y *= rhs.toCGFloat() }
+    
+    mutating func normalize() { self = self.normalized() }
 
     static func +(lhs : Self, rhs : Self) -> Self { return Self(lhs.x + rhs.x, lhs.y + rhs.y) }
     static func -(lhs : Self, rhs : Self) -> Self { return Self(lhs.x - rhs.x, lhs.y - rhs.y) }
