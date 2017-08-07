@@ -72,6 +72,7 @@ extension NewXY {
         return Self(lhs.x / rhs.toCGFloat(), lhs.y / rhs.toCGFloat())
     }
     
+    func floored() -> Self { return Self(Darwin.floor(x), Darwin.floor(y)) }
     func normalized() -> Self { let m = getMagnitude(); return Self(x / m, y / m) }
     
     func getMagnitude() -> CGFloat { return sqrt(pow(x, 2) + pow(y, 2)) }
@@ -80,6 +81,10 @@ extension NewXY {
     
     static func randomPoint(range: CGSize) -> CGPoint {
         return CGPoint(Axioms.randomFloat(0, range.width), Axioms.randomFloat(0, range.height))
+    }
+    
+    static func fromPolar(r : XYNumeric, theta : XYNumeric) -> Self {
+        return Self(cos(theta.toCGFloat()) * r.toCGFloat(), sin(theta.toCGFloat()) * r.toCGFloat())
     }
 }
 

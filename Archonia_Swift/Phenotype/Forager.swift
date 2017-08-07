@@ -11,43 +11,42 @@ import GameplayKit
 import SpriteKit
 
 struct Forager {
-    let squareSize: Double
+    let archon: Archon
+    let forageRadius: Double
 
-    let relativePositions : [CGPoint]
-    let sprite : SKSpriteNode
-    let scene : GameScene
+    let relativePositions: [CGPoint]
     
-    var searchAnchor : CGPoint
-    var targetPosition : CGPoint
-    var trail : CBuffer<CGPoint>
+    var searchAnchor: CGPoint
+    var targetPosition: CGPoint
+    var trail: CBuffer<CGPoint>!
     
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
     
-    init(_ archon : Archon) {
-        squareSize = (archon.genome.genes["forageGridSize"]! as! ScalarGene).value
-        
-        relativePositions = [
-            CGPoint(0, squareSize), CGPoint(squareSize, squareSize), CGPoint(squareSize, 0),
-            CGPoint(squareSize, -squareSize), CGPoint(0, -squareSize), CGPoint(-squareSize, -squareSize),
-            CGPoint(-squareSize, 0), CGPoint(-squareSize, squareSize)
-        ]
-        
-        sprite = archon.sprite
-        scene = sprite.parent as! GameScene
-        
-        searchAnchor = sprite.position
-        targetPosition = searchAnchor
+    init(_ inArchon : Archon) {
+        archon = inArchon
+        searchAnchor = archon.sprite.position
+        targetPosition = CGPoint.zero
         trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
+        
+        forageRadius = (archon.genome.genes["forageGridSize"]! as! ScalarGene).value
+        
+        var workPositions = [CGPoint]()
+        for m in 0 ..< 8 {
+            let p = CGPoint.fromPolar(r: forageRadius, theta: CGFloat(m) * (2 * CGFloat.pi) / 8)
+            workPositions.append(p.floored())
+        }
+        
+        relativePositions = workPositions
     }
     
     func computeMovementConstraint() -> MovementConstraint {
         var constraint = MovementConstraint.random
         
-        if sprite.position.x - CGFloat(squareSize) < 0 { constraint = .rightOnly }
-        else if sprite.position.x + CGFloat(squareSize) > scene.size.width { constraint = .leftOnly }
+        if archon.sprite.position.x - CGFloat(forageRadius) < 0 { constraint = .rightOnly }
+        else if archon.sprite.position.x + CGFloat(forageRadius) > archon.scene.size.width { constraint = .leftOnly }
         
-        if sprite.position.y - CGFloat(squareSize) < 0 { constraint = .upOnly }
-        else if sprite.position.y + CGFloat(squareSize) > scene.size.height { constraint = .downOnly }
+        if archon.sprite.position.y - CGFloat(forageRadius) < 0 { constraint = .upOnly }
+        else if archon.sprite.position.y + CGFloat(forageRadius) > archon.scene.size.height { constraint = .downOnly }
         
         return constraint
     }
@@ -58,9 +57,9 @@ struct Forager {
         var candidateTarget : CGPoint
         
         for i in 0 ..< bestChoices.count {
-            candidateTarget = relativePositions[bestChoices[i]] + searchAnchor
+            candidateTarget = (relativePositions[bestChoices[i]] + searchAnchor).floored()
             
-            if doWeRemember(point: candidateTarget) { fallbacks.append(bestChoices[i]) }
+            if doWeRemember(candidateTarget) { fallbacks.append(bestChoices[i]) }
             else { acceptableChoices.append(bestChoices[i]) }
         }
         
@@ -73,12 +72,12 @@ struct Forager {
             let d = GKRandomDistribution(lowestValue: 0, highestValue: acceptableChoices.count - 1);
             let c = d.nextInt()
             
-            candidateTarget = relativePositions[acceptableChoices[c]] + searchAnchor
+            candidateTarget = (relativePositions[acceptableChoices[c]] + searchAnchor).floored()
         } else {
             let d = GKRandomDistribution(lowestValue: 0, highestValue: acceptableChoices.count - 1);
             let c = d.nextInt()
             
-            candidateTarget = relativePositions[fallbacks[c]] + searchAnchor
+            candidateTarget = (relativePositions[fallbacks[c]] + searchAnchor).floored()
         }
         
         searchAnchor = candidateTarget
@@ -87,11 +86,16 @@ struct Forager {
         targetPosition = candidateTarget
     }
     
-    func doWeRemember(point: CGPoint) -> Bool {
+    func doWeRemember(_ targetPoint: CGPoint) -> Bool {
         var weRememberIt = false
         
-        let _ = self.trail.forEach(callback: { (_: Int, value: CGPoint) -> Bool in
-            if point == value { weRememberIt = true; return false } else { return true }
+        let _ = self.trail.forEach(callback: { (_: Int, rememberedPoint: CGPoint) -> Bool in
+            if targetPoint.getDistanceTo(rememberedPoint) < CGFloat(forageRadius) {
+                weRememberIt = true
+                return false
+            } else {
+                return true
+            }
         })
         
         return weRememberIt
@@ -100,14 +104,10 @@ struct Forager {
     func populateMovementChoices(_ constraint : MovementConstraint) -> [Int] {
         switch(constraint) {
         case .random:    return [0, 1, 2, 3, 4, 5, 6, 7]
-        case .upOnly:
-            return [0, 1, 7]
-        case .rightOnly:
-            return [1, 2, 3]
-        case .downOnly:
-            return [3, 4, 5]
-        case .leftOnly:
-            return [5, 6, 7]
+        case .rightOnly: return [7, 0, 1]
+        case .upOnly:    return [1, 2, 3]
+        case .leftOnly:  return [3, 4, 5]
+        case .downOnly:  return [5, 6, 7]
         }
     }
     
