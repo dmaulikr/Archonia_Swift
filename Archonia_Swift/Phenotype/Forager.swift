@@ -62,8 +62,18 @@ class Forager {
         for i in 0 ..< bestChoices.count {
             candidateTarget = (relativePositions[bestChoices[i]] + searchAnchor).floored()
             
-            if doWeRemember(candidateTarget) { fallbacks.append(bestChoices[i]) }
-            else { acceptableChoices.append(bestChoices[i]) }
+//            let sprite = SKSpriteNode(texture: Archon.buttonTexture)
+//            sprite.colorBlendFactor = 1
+//            sprite.position = candidateTarget
+//            archon.scene.addChild(sprite)
+//
+//            let fade = SKAction.fadeOut(withDuration: 1)
+//            let remove = SKAction.removeFromParent()
+//            let sequence = SKAction.sequence([fade, remove])
+//            sprite.run(sequence)
+            
+            if doWeRemember(candidateTarget) { /*sprite.color = .black;*/ fallbacks.append(bestChoices[i]) }
+            else { /*sprite.color = .yellow;*/ acceptableChoices.append(bestChoices[i]) }
         }
         
         // If we're in up-only or down-only mode, we need to allow
@@ -87,6 +97,19 @@ class Forager {
         trail.store(candidateTarget)
         
         targetPosition = candidateTarget
+        
+//        let sprite = SKSpriteNode(texture: Archon.buttonTexture)
+//        sprite.colorBlendFactor = 1
+//        sprite.color = .green
+//        sprite.position = targetPosition
+//        archon.scene.addChild(sprite)
+//        
+//        let wait = SKAction.wait(forDuration: 1)
+//        let change = SKAction.run { sprite.color = .red }
+//        let fade = SKAction.fadeOut(withDuration: 10)
+//        let remove = SKAction.removeFromParent()
+//        let sequence = SKAction.sequence([wait, change, fade, remove])
+//        sprite.run(sequence)
     }
     
     func doWeRemember(_ targetPoint: CGPoint) -> Bool {
