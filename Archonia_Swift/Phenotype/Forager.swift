@@ -12,13 +12,25 @@ import SpriteKit
 
 class Forager {
     let archon: Archon
+    let backtrackLimit: Double
+//    static var counters = [0, 0, 0, 0, 0, 0, 0, 0]
     let forageRadius: Double
-
     let relativePositions: [CGPoint]
     
     var searchAnchor = CGPoint.zero
     var targetPosition = CGPoint.zero
     var trail: CBuffer<CGPoint>!
+    
+    static let randomers = [
+        GKRandomDistribution(lowestValue: 0, highestValue: 0),
+        GKRandomDistribution(lowestValue: 0, highestValue: 1),
+        GKRandomDistribution(lowestValue: 0, highestValue: 2),
+        GKRandomDistribution(lowestValue: 0, highestValue: 3),
+        GKRandomDistribution(lowestValue: 0, highestValue: 4),
+        GKRandomDistribution(lowestValue: 0, highestValue: 5),
+        GKRandomDistribution(lowestValue: 0, highestValue: 6),
+        GKRandomDistribution(lowestValue: 0, highestValue: 7)
+    ]
     
     enum MovementConstraint { case random, upOnly, rightOnly, downOnly, leftOnly }
     
@@ -30,10 +42,12 @@ class Forager {
         var workPositions = [CGPoint]()
         for m in 0 ..< 8 {
             let p = CGPoint.fromPolar(r: forageRadius, theta: CGFloat(m) * (2 * CGFloat.pi) / 8)
-            workPositions.append(p.floored())
+            workPositions.append(p)
         }
         
         relativePositions = workPositions
+        backtrackLimit = Double(relativePositions[0].getDistanceTo(relativePositions[1]))
+        
         reset()
     }
     
@@ -60,7 +74,7 @@ class Forager {
         var candidateTarget : CGPoint
         
         for i in 0 ..< bestChoices.count {
-            candidateTarget = (relativePositions[bestChoices[i]] + searchAnchor).floored()
+            candidateTarget = relativePositions[bestChoices[i]] + searchAnchor
             
 //            let sprite = SKSpriteNode(texture: Archon.buttonTexture)
 //            sprite.colorBlendFactor = 1
@@ -76,21 +90,29 @@ class Forager {
             else { /*sprite.color = .yellow;*/ acceptableChoices.append(bestChoices[i]) }
         }
         
-        // If we're in up-only or down-only mode, we need to allow
-        // for horizontal movement, in case we're crammed against
-        // the top or bottom of the world
-        fallbacks.append(2); fallbacks.append(6)
+//        var spriteColor = NSColor.green
         
         if acceptableChoices.count > 0 {
-            let d = GKRandomDistribution(lowestValue: 0, highestValue: acceptableChoices.count - 1);
-            let c = d.nextInt()
+            let c = Forager.randomers[acceptableChoices.count - 1].nextInt()
             
-            candidateTarget = (relativePositions[acceptableChoices[c]] + searchAnchor).floored()
+//            Forager.counters[acceptableChoices[c]] += 1
+            
+//            let label = SKLabelNode(text: "\(Forager.counters)")
+//            label.position = CGPoint(x: 400, y: 100)
+//            label.name = "label"
+//            
+//            if let remove = archon.scene.childNode(withName: "label") {
+//                remove.removeFromParent()
+//            }
+//            
+//            archon.scene.addChild(label)
+            
+            candidateTarget = relativePositions[acceptableChoices[c]] + searchAnchor
         } else {
-            let d = GKRandomDistribution(lowestValue: 0, highestValue: acceptableChoices.count - 1);
-            let c = d.nextInt()
+//            spriteColor = .blue
+            let c = Forager.randomers[fallbacks.count - 1].nextInt()
             
-            candidateTarget = (relativePositions[fallbacks[c]] + searchAnchor).floored()
+            candidateTarget = relativePositions[fallbacks[c]] + searchAnchor
         }
         
         searchAnchor = candidateTarget
@@ -100,7 +122,7 @@ class Forager {
         
 //        let sprite = SKSpriteNode(texture: Archon.buttonTexture)
 //        sprite.colorBlendFactor = 1
-//        sprite.color = .green
+//        sprite.color = spriteColor
 //        sprite.position = targetPosition
 //        archon.scene.addChild(sprite)
 //        
@@ -116,7 +138,7 @@ class Forager {
         var weRememberIt = false
         
         let _ = self.trail.forEach(callback: { (_: Int, rememberedPoint: CGPoint) -> Bool in
-            if targetPoint.getDistanceTo(rememberedPoint) < CGFloat(forageRadius) {
+            if targetPoint.getDistanceTo(rememberedPoint) < CGFloat(backtrackLimit) {
                 weRememberIt = true
                 return false
             } else {
