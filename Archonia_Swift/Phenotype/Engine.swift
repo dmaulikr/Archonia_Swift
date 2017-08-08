@@ -104,7 +104,7 @@ extension Engine {
         totalThreatVector *= -forager.forageRadius
         
         let targetPosition = archon.sprite.position + CGPoint(totalThreatVector)
-        let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
+        let speed = archon.genome.getGeneValue(.speed)
         let duration = forager.forageRadius / speed
         
         let move = SKAction.move(to: targetPosition, duration: duration)
@@ -128,7 +128,7 @@ extension Engine {
         forager.tick()
         
         let distance = Double(forager.targetPosition.getDistanceTo(archon.sprite.position))
-        let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
+        let speed = archon.genome.getGeneValue(.speed)
         let duration = distance / speed
         
         let move = SKAction.move(to: forager.targetPosition, duration: duration)
@@ -151,7 +151,7 @@ extension Engine {
         // and appear somewhere else, effectively a different particle.
         if mannaParticle.isCoherent && mannaParticle.incarnationNumber == expectedIncarnationNumber {
             let distance = Double(mannaParticle.sprite.position.getDistanceTo(archon.sprite.position))
-            let speed = (archon.genome.genes["speed"]! as! ScalarGene).value
+            let speed = archon.genome.getGeneValue(.speed)
             let duration = distance / speed
             
             let move = SKAction.move(to: mannaParticle.sprite.position, duration: duration)

@@ -36,7 +36,7 @@ class Forager {
     init(_ inArchon : Archon) {
         archon = inArchon
         
-        forageRadius = (archon.genome.genes["forageGridSize"]! as! ScalarGene).value
+        forageRadius = archon.genome.getGeneValue(.forageGridSize)
         
         var workPositions = [CGPoint]()
         for m in 0 ..< 8 {
