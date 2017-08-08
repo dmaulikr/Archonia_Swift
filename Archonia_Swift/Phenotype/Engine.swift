@@ -68,6 +68,15 @@ extension Engine {
     }
 }
 
+extension SKAction {
+    class func move(toward ultimateDestination: CGPoint, from: CGPoint, speed: CGFloat) -> SKAction {
+        let distance = from.getDistanceTo(ultimateDestination)
+        let duration = distance / speed
+        
+        return SKAction.move(to: ultimateDestination, duration: TimeInterval(duration))
+    }
+}
+
 extension Engine {
     func eat(mannaParticle atIndex: Int) {
         var actions = [SKAction]()
@@ -104,10 +113,9 @@ extension Engine {
         totalThreatVector *= -forager.forageRadius
         
         let targetPosition = archon.sprite.position + CGPoint(totalThreatVector)
-        let speed = archon.genome.getGeneValue(.speed)
-        let duration = forager.forageRadius / speed
+        let speed = CGFloat(archon.genome.getGeneValue(.speed))
         
-        let move = SKAction.move(to: targetPosition, duration: duration)
+        let move = SKAction.move(toward: targetPosition, from: archon.sprite.position, speed: speed)
         let next = SKAction.run { self.forage(reset: true) }
         let sequence = SKAction.sequence([move, next])
         
@@ -127,11 +135,9 @@ extension Engine {
         
         forager.tick()
         
-        let distance = Double(forager.targetPosition.getDistanceTo(archon.sprite.position))
-        let speed = archon.genome.getGeneValue(.speed)
-        let duration = distance / speed
+        let speed = CGFloat(archon.genome.getGeneValue(.speed))
         
-        let move = SKAction.move(to: forager.targetPosition, duration: duration)
+        let move = SKAction.move(toward: forager.targetPosition, from: archon.sprite.position, speed: speed)
         let next = SKAction.run { self.forage(reset: false) }
         
         let movementSequence = SKAction.sequence([move, next])
@@ -150,11 +156,9 @@ extension Engine {
         // away, or is eaten by someone else, after which it would be reincarnated
         // and appear somewhere else, effectively a different particle.
         if mannaParticle.isCoherent && mannaParticle.incarnationNumber == expectedIncarnationNumber {
-            let distance = Double(mannaParticle.sprite.position.getDistanceTo(archon.sprite.position))
-            let speed = archon.genome.getGeneValue(.speed)
-            let duration = distance / speed
+            let speed = CGFloat(archon.genome.getGeneValue(.speed))
             
-            let move = SKAction.move(to: mannaParticle.sprite.position, duration: duration)
+            let move = SKAction.move(toward: mannaParticle.sprite.position, from: archon.sprite.position, speed: speed)
             actions.append(move)
         }
         
