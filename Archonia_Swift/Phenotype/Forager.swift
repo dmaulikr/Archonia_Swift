@@ -13,7 +13,6 @@ import SpriteKit
 class Forager {
     let archon: Archon
     let backtrackLimit: Double
-//    static var counters = [0, 0, 0, 0, 0, 0, 0, 0]
     let forageRadius: Double
     let relativePositions: [CGPoint]
     
@@ -76,40 +75,15 @@ class Forager {
         for i in 0 ..< bestChoices.count {
             candidateTarget = relativePositions[bestChoices[i]] + searchAnchor
             
-//            let sprite = SKSpriteNode(texture: Archon.buttonTexture)
-//            sprite.colorBlendFactor = 1
-//            sprite.position = candidateTarget
-//            archon.scene.addChild(sprite)
-//
-//            let fade = SKAction.fadeOut(withDuration: 1)
-//            let remove = SKAction.removeFromParent()
-//            let sequence = SKAction.sequence([fade, remove])
-//            sprite.run(sequence)
-            
-            if doWeRemember(candidateTarget) { /*sprite.color = .black;*/ fallbacks.append(bestChoices[i]) }
-            else { /*sprite.color = .yellow;*/ acceptableChoices.append(bestChoices[i]) }
+            if doWeRemember(candidateTarget) { fallbacks.append(bestChoices[i]) }
+            else { acceptableChoices.append(bestChoices[i]) }
         }
-        
-//        var spriteColor = NSColor.green
         
         if acceptableChoices.count > 0 {
             let c = Forager.randomers[acceptableChoices.count - 1].nextInt()
             
-//            Forager.counters[acceptableChoices[c]] += 1
-            
-//            let label = SKLabelNode(text: "\(Forager.counters)")
-//            label.position = CGPoint(x: 400, y: 100)
-//            label.name = "label"
-//            
-//            if let remove = archon.scene.childNode(withName: "label") {
-//                remove.removeFromParent()
-//            }
-//            
-//            archon.scene.addChild(label)
-            
             candidateTarget = relativePositions[acceptableChoices[c]] + searchAnchor
         } else {
-//            spriteColor = .blue
             let c = Forager.randomers[fallbacks.count - 1].nextInt()
             
             candidateTarget = relativePositions[fallbacks[c]] + searchAnchor
@@ -119,19 +93,6 @@ class Forager {
         trail.store(candidateTarget)
         
         targetPosition = candidateTarget
-        
-//        let sprite = SKSpriteNode(texture: Archon.buttonTexture)
-//        sprite.colorBlendFactor = 1
-//        sprite.color = spriteColor
-//        sprite.position = targetPosition
-//        archon.scene.addChild(sprite)
-//        
-//        let wait = SKAction.wait(forDuration: 1)
-//        let change = SKAction.run { sprite.color = .red }
-//        let fade = SKAction.fadeOut(withDuration: 10)
-//        let remove = SKAction.removeFromParent()
-//        let sequence = SKAction.sequence([wait, change, fade, remove])
-//        sprite.run(sequence)
     }
     
     func doWeRemember(_ targetPoint: CGPoint) -> Bool {
