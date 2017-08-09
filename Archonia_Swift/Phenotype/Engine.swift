@@ -26,6 +26,7 @@ class Engine {
     }
     
     enum State { case Foraging, PursuingManna, EatingManna, FleeingArchon }
+    enum ForagerReset { case none, full, avoid(CGPoint) }
 }
 
 extension Engine {
@@ -55,12 +56,12 @@ extension Engine {
         return threats
     }
 
-    func launch() { forage(reset: true) }
+    func launch() { forage(reset: .full) }
     
     func processStimuli() {
         guard !archon.sprite.hasActions() else { fatalError() }
         
-        if stimuli.count == 0 { state = .Foraging; forage(reset: true) }
+        if stimuli.count == 0 { state = .Foraging; forage(reset: .full) }
         else if let threats = findThreats() { state = .FleeingArchon; flee(threats) }
         else if let index = find(stimulus: "contact") { state = .EatingManna; eat(mannaParticle: index) }
         else if let index = find(stimulus: "sense") { state = .PursuingManna; pursue(mannaParticle: index) }
@@ -93,7 +94,7 @@ extension Engine {
             actions.append(contentsOf: [wait, eat])
         }
         
-        let next = SKAction.run { self.forage(reset: true) }
+        let next = SKAction.run { self.forage(reset: .full) }
         actions.append(next)
         
         archon.sprite.run(SKAction.sequence(actions))
@@ -114,31 +115,47 @@ extension Engine {
         
         let targetPosition = archon.sprite.position + CGPoint(totalThreatVector)
         let speed = CGFloat(archon.genome.getGeneValue(.speed))
-        
         let move = SKAction.move(toward: targetPosition, from: archon.sprite.position, speed: speed)
-        let next = SKAction.run { self.forage(reset: true) }
+
+        let avoid = archon.sprite.position
+        let next = SKAction.run { self.forage(reset: .avoid(avoid)) }
+
         let sequence = SKAction.sequence([move, next])
         
         archon.sprite.removeAllActions()
         archon.sprite.run(sequence)
     }
     
-    func forage(reset: Bool) {
+    func forage(reset: ForagerReset) {
         guard stimuli.count == 0 else { archon.sprite.removeAllActions(); processStimuli(); return }
         
         state = .Foraging
         
         var actions = [SKAction]()
+        var pauseForBreath = true
         
-        if reset { forager.reset(); state = .Foraging }
-        else { actions.append(SKAction.wait(forDuration: 0.5, withRange: 0.5)) }
+        switch(reset) {
+        case .none:
+            break;
+
+        case .full:
+            pauseForBreath = false
+            forager.reset()
+            state = .Foraging
+            
+        case .avoid(let position):
+            forager.reset(avoid: position)
+            state = .Foraging
+        }
+        
+        if pauseForBreath { actions.append(SKAction.wait(forDuration: 0.5, withRange: 0.5)) }
         
         forager.tick()
         
         let speed = CGFloat(archon.genome.getGeneValue(.speed))
         
         let move = SKAction.move(toward: forager.targetPosition, from: archon.sprite.position, speed: speed)
-        let next = SKAction.run { self.forage(reset: false) }
+        let next = SKAction.run { self.forage(reset: .none) }
         
         let movementSequence = SKAction.sequence([move, next])
         
@@ -169,7 +186,7 @@ extension Engine {
             // as our circumference touches it, which will cancel this set of actions
             // and re-categorize the stimulus as a contact
             self.stimuli.remove(at: atIndex)
-            self.forage(reset: true)
+            self.forage(reset: .full)
         }
         actions.append(next)
         

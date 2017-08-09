@@ -55,6 +55,11 @@ class Forager {
         trail = CBuffer<CGPoint>(baseElement: CGPoint(), howManyElements: 8)
     }
     
+    func reset(avoid position: CGPoint) {
+        reset()
+        trail.store(position)
+    }
+    
     func computeMovementConstraint() -> MovementConstraint {
         var constraint = MovementConstraint.random
         
